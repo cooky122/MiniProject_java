@@ -14,7 +14,7 @@ public class PostMain {public static LocalDate now = LocalDate.now();
     public static void main(String[] args) {
         while(true) {
             System.out.println("게시글 생성 메인 페이지");
-            System.out.print("1.게시글 입력 / 2.게시글 수정 / 3.게시글 삭제 / 4.게시글 검색");
+            System.out.println("1.게시글 입력 / 2.게시글 수정 / 3.게시글 삭제 / 4.게시글 검색");
             String ans = sc.nextLine();
             switch (ans) {
                 case "1":
@@ -59,12 +59,6 @@ public class PostMain {public static LocalDate now = LocalDate.now();
             pstmt = con.prepareStatement(sql);
         } catch (SQLException e) {
             System.out.println("pstmt오류");
-            throw new RuntimeException(e);
-        }
-        try {
-            ResultSet rs = pstmt.executeQuery();
-        } catch (SQLException e) {
-            System.out.println("rs오류");
             throw new RuntimeException(e);
         }
 
@@ -121,6 +115,13 @@ public class PostMain {public static LocalDate now = LocalDate.now();
             pstmt.setInt(8,0);
         } catch (SQLException e) {
             System.out.println("입력값 오류");
+            throw new RuntimeException(e);
+        }
+
+        try {
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("올리기 실패");
             throw new RuntimeException(e);
         }
 
