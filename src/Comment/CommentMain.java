@@ -39,6 +39,17 @@ public class CommentMain {
         }
     }
 
+    private static void SelectComment() {
+    }
+
+    private static void DeleteComment() {
+
+    }
+
+    private static void UpdateComment() {
+        
+    }
+
     public static void InsertComment() {
         Connection con = MyDBConnection.getConnection();
         PreparedStatement pstmt = null;

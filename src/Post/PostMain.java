@@ -35,6 +35,18 @@ public class PostMain {public static LocalDate now = LocalDate.now();
         }//end of while
     }//end of main
 
+    private static void SelectPost() {
+
+    }
+
+    private static void DeletePost() {
+        
+    }
+
+    private static void UpdatePost() {
+
+    }
+
     public static void InsertPost() {
         Connection con = MyDBConnection.getConnection();
         PreparedStatement pstmt = null;
@@ -69,7 +81,7 @@ public class PostMain {public static LocalDate now = LocalDate.now();
         }
         while (true) {
             System.out.print("\n아이디 입력 >>");
-            String memID = sc.nextLine();
+            memID = sc.nextLine();
             if (memID.length() > 20) {
                 System.out.println("20자 이내로 작성해주세요");
             } else if (memID.length() < 20) {
@@ -78,7 +90,7 @@ public class PostMain {public static LocalDate now = LocalDate.now();
         }
         while (true) {
             System.out.print("\n제목 입력 >>");
-            String title = sc.nextLine();
+            title = sc.nextLine();
             if (title.length() > 50) {
                 System.out.println("50자 이내로 작성해주세요");
             } else if (title.length() < 50) {
@@ -87,7 +99,7 @@ public class PostMain {public static LocalDate now = LocalDate.now();
         }
         while (true) {
             System.out.print("\n내용 입력 >>");
-            String content = sc.nextLine();
+            content = sc.nextLine();
             if (content.length() > 3000) {
                 System.out.println("3000자 이내로 작성해주세요");
             } else if (content.length() < 3000) {
@@ -95,14 +107,20 @@ public class PostMain {public static LocalDate now = LocalDate.now();
             }
         }
 
-        pstmt.setInt(1, boardID);
-        pstmt.setString(2, memID);
-        pstmt.setString(3,title);
-        pstmt.setString(4,content);
-        pstmt.setString(5,now.toString());
-        pstmt.setString(6,now.toString());
-        pstmt.setInt(7,0);
-        pstmt.setInt(8,0);
+
+        try {
+            pstmt.setInt(1, boardID);
+            pstmt.setString(2, memID);
+            pstmt.setString(3,title);
+            pstmt.setString(4,content);
+            pstmt.setString(5,now.toString());
+            pstmt.setString(6,now.toString());
+            pstmt.setInt(7,0);
+            pstmt.setInt(8,0);
+        } catch (SQLException e) {
+            System.out.println("입력값 오류");
+            throw new RuntimeException(e);
+        }
 
     }
 }
