@@ -33,6 +33,8 @@ public class CommentMain {
                 case "4":
                     SelectComment();
                     break;
+                case "100":
+                    return;
                 default:
                     System.out.println("잘못된 값 입력");
             }

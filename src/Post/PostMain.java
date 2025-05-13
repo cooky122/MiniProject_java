@@ -29,6 +29,8 @@ public class PostMain {public static LocalDate now = LocalDate.now();
                 case "4":
                     SelectPost();
                     break;
+                case "100":
+                    return;
                 default:
                     System.out.println("잘못된 값 입력");
             }
