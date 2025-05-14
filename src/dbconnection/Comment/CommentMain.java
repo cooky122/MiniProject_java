@@ -1,5 +1,6 @@
-package Comment;
-import com.mysql.cj.jdbc.MysqlPooledConnection;
+package dbconnection.Comment;
+
+import dbconnection.MyDBConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -48,6 +49,8 @@ public class CommentMain {
     }
 
     private static void SelectComment() {
+
+
     }
 
     private static void DeleteComment() {
@@ -59,13 +62,14 @@ public class CommentMain {
     }
 
     public static void InsertComment() {
-        Connection con = MyDBConnection.getConnection();
-        PreparedStatement pstmt = null;
 
         String sql = "insert into comment values(null,?,?,?,?,?)";
 
+        Connection con = MyDBConnection.getConnection();
+        PreparedStatement pstmt = null;
+
         try {
-            pstmt = con.prepareStatement(sql);
+             pstmt = con.prepareStatement(sql);
         } catch (SQLException e) {
             System.out.println("pstmt 오류");
             throw new RuntimeException(e);
@@ -78,8 +82,8 @@ public class CommentMain {
         String comment = sc.nextLine();
 
         try {
-            //TODO:postID 끌고올것
-            pstmt.setInt(1,1);
+            //TODO:postID 끌고올것 현재 2번 포스트 고정
+            pstmt.setInt(1,2);
             pstmt.setString(2,ID);
             pstmt.setString(3,comment);
             pstmt.setString(4, formattedTime);
