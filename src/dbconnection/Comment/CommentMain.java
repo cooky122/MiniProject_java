@@ -14,6 +14,7 @@ public class CommentMain {
 //        Connection con = MyDBConnection.getConnection();
 //        PreparedStatement pstmt = con.prepareStatement(sql);
 //        ResultSet rs = pstmt.executeQuery();
+
     //로컬 시간 불러오기
     public static LocalDateTime now = LocalDateTime.now();
     //SQL문 사용가능한 DATETIME 형태로 포맷
@@ -21,8 +22,9 @@ public class CommentMain {
     public static String formattedTime = now.format(formatter);
     //Scanner 객체 선언
     public static Scanner sc = new Scanner(System.in);
+    private static CommentInfo commentInfo;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         while(true) {
             System.out.println("댓글 생성 메인 페이지");
             System.out.println("1.댓글 입력 / 2.댓글 수정 / 3.댓글 삭제 / 4.댓글 검색");
@@ -48,9 +50,34 @@ public class CommentMain {
         }
     }
 
-    private static void SelectComment() {
+    private static void SelectComment() throws SQLException {
+        Connection con = MyDBConnection.getConnection();
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        String sql = "select * from comment where id = ?";
 
+        try {
+            pstmt = con.prepareStatement(sql);
+        } catch (SQLException e) {
+            System.out.println("pstmt 오류");
+        }
 
+        try {
+            rs = pstmt.executeQuery();
+        } catch (SQLException e) {
+            System.out.println("rs 오류");
+        }
+
+        int comment_id = rs.getInt("comment_id");
+        int post_id = rs.getInt("post_id");
+        String mem_id = rs.getString("mem_id");
+        String content = rs.getString("content");
+        String createTime = rs.getString("createTime");
+
+        commentInfo = new CommentInfo(comment_id, post_id, mem_id, content, createTime);
+        commentInfo.toString();
+
+        MyDBConnection.close(rs, pstmt, con);
     }
 
     private static void DeleteComment() {
