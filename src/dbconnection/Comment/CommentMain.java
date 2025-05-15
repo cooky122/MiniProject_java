@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Scanner;
 
 public class CommentMain {
@@ -83,6 +84,32 @@ public class CommentMain {
     private static void SelectComment() {
         System.out.println("댓글 찾기 페이지");
         System.out.println("원하는 검색방법을 선택해 주세요");
+        System.out.println("1.전체 댓글 검색 / 2.게시글 기준 검색 / 3.게시자 기준 검색");
+        int result = Integer.parseInt(sc.nextLine());
+        switch (result) {
+            case 1: printAll(commentDAO.findAllComment());
+            break;
+            case 2:
+                System.out.println("찾기를 원하는 게시글 입력");
+                System.out.print(">> ");
+                int post_id = Integer.parseInt(sc.nextLine());
+                printAll(commentDAO.findAllCommentByPostId(post_id));
+            break;
+            case 3:
+                System.out.println("검색을 원하는 멤버 ID 입력");
+                System.out.print(">> ");
+                String mem_id = sc.nextLine();
+                printAll(commentDAO.findAllCommentByMemId(mem_id));
+                break;
+        }
+    }
+
+    private static void printAll(List<CommentDTO> list) {
+        System.out.println("\n===== 댓글 목록 =====");
+        for (CommentDTO comment : list ) {
+            System.out.println(comment); // toString 자동 호출
+            System.out.println("--------------------------------");
+        }
     }
 
 

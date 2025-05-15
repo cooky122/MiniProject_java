@@ -36,7 +36,7 @@ public class CommentDAO {
 
   }//end of insert
 
-  public List<CommentDTO> findALlComment() {
+  public List<CommentDTO> findAllComment() {
     List comments = new ArrayList<CommentDTO>();
 
     String sql = "select * from Comment order by comment_id desc";
@@ -65,16 +65,17 @@ public class CommentDAO {
     return comments;
   }
 
-  public List<CommentDTO> findALlCommentByPostId(int post_id) {
+  public List<CommentDTO> findAllCommentByPostId(int post_id) {
     List comments = new ArrayList<CommentDTO>();
 
-    String sql = "select * from Comment where post_id=? order by comment_id desc";
+    String sql = "select * from Comment where post_id=? order by createTime desc";
 
     try{
-      pstmt.setInt(1, post_id);
-
       con = MyDBConnection.getConnection();
       pstmt = con.prepareStatement(sql);
+
+      pstmt.setInt(1, post_id);
+
       rs = pstmt.executeQuery();
 
       while (rs.next()) {
@@ -94,21 +95,36 @@ public class CommentDAO {
       MyDBConnection.close(rs, pstmt, con);
     }
     return comments;
-  }//end of findAllCommentByPostId
+  }
+  public List<CommentDTO> findAllCommentByMemId(String mem_id) {
+    List comments = new ArrayList<CommentDTO>();
 
-  /*public int getCommentId() throws SQLException {
-    String sql = "select max(comment_id)+1 from comment";
+    String sql = "select * from Comment where mem_id=? order by createTime desc";
 
+    try{
       con = MyDBConnection.getConnection();
       pstmt = con.prepareStatement(sql);
-      rs=pstmt.executeQuery();
 
-      rs.next();
+      pstmt.setString(1, mem_id);
 
-      int lastCommentId = rs.getInt(1);
+      rs = pstmt.executeQuery();
 
+      while (rs.next()) {
+        CommentDTO commentDTO = new CommentDTO();
+
+        commentDTO.setComment_id(rs.getInt("comment_id"));
+        commentDTO.setPost_id(rs.getInt("post_id"));
+        commentDTO.setMem_id(rs.getString("mem_id"));
+        commentDTO.setContent(rs.getString("content"));
+        commentDTO.setCreateTime(rs.getString("createTime"));
+
+        comments.add(commentDTO);
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }finally {
       MyDBConnection.close(rs, pstmt, con);
-
-    return lastCommentId;
-  }*/
+    }
+    return comments;
+  }
 }
