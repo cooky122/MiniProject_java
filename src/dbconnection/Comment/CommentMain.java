@@ -22,7 +22,8 @@ public class CommentMain {
     public static String formattedTime = now.format(formatter);
     //Scanner 객체 선언
     public static Scanner sc = new Scanner(System.in);
-    private static CommentInfo commentInfo;
+    private static CommentDTO commentDTO;
+    private static CommentDAO commentDAO = new CommentDAO();
 
     public static void main(String[] args) throws SQLException {
         while(true) {
@@ -31,7 +32,7 @@ public class CommentMain {
             String ans = sc.nextLine();
             switch (ans) {
                 case "1":
-                    InsertComment();
+                    InsetComment();
                     break;
                 case "2":
                     UpdateComment();
@@ -50,36 +51,6 @@ public class CommentMain {
         }
     }
 
-    private static void SelectComment() throws SQLException {
-        Connection con = MyDBConnection.getConnection();
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
-        String sql = "select * from comment where id = ?";
-
-        try {
-            pstmt = con.prepareStatement(sql);
-        } catch (SQLException e) {
-            System.out.println("pstmt 오류");
-        }
-
-        try {
-            rs = pstmt.executeQuery();
-        } catch (SQLException e) {
-            System.out.println("rs 오류");
-        }
-
-        int comment_id = rs.getInt("comment_id");
-        int post_id = rs.getInt("post_id");
-        String mem_id = rs.getString("mem_id");
-        String content = rs.getString("content");
-        String createTime = rs.getString("createTime");
-
-        commentInfo = new CommentInfo(comment_id, post_id, mem_id, content, createTime);
-        commentInfo.toString();
-
-        MyDBConnection.close(rs, pstmt, con);
-    }
-
     private static void DeleteComment() {
 
     }
@@ -88,48 +59,30 @@ public class CommentMain {
         
     }
 
-    public static void InsertComment() {
-
-        String sql = "insert into comment values(null,?,?,?,?,?)";
-
-        Connection con = MyDBConnection.getConnection();
-        PreparedStatement pstmt = null;
-
-        try {
-             pstmt = con.prepareStatement(sql);
-        } catch (SQLException e) {
-            System.out.println("pstmt 오류");
-            throw new RuntimeException(e);
-        }
+    private static void InsetComment() {
 
         System.out.println("댓글 입력 페이지");
-        System.out.print("아이디 입력 >");
-        String ID = sc.nextLine();
-        System.out.print("\n댓글 입력 >");
-        String comment = sc.nextLine();
+        System.out.println("원하는 게시글을 선택해 주세요");
+//        보드 목록을 불러오는 메서드()
+        System.out.print("게시글 번호 입력 >>");
+        int post_id = Integer.parseInt(sc.nextLine());
+//        추후 로그인 상태라면 String mem_id = 입력된 ID
+        System.out.println("\n당신의 ID를 입력해 주세요");
+        System.out.print("ID 입력 >>");
+        String mem_id = sc.nextLine();
+        System.out.println("\n작성하고자 하는 내용을 입력해주세요");
+        System.out.print(">>");
+        String content = sc.nextLine();
+        String createTime = now.format(formatter);
 
-        try {
-            //TODO:postID 끌고올것 현재 2번 포스트 고정
-            pstmt.setInt(1,2);
-            pstmt.setString(2,ID);
-            pstmt.setString(3,comment);
-            pstmt.setString(4, formattedTime);
-            pstmt.setInt(5,0);
-        } catch (SQLException e) {
-            System.out.println("입력값 오류");
-            throw new RuntimeException(e);
-        }
+        CommentDTO dto = new CommentDTO(post_id,mem_id,content,createTime);
 
-        try {
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("올리기 실패");
-            throw new RuntimeException(e);
-        }
+        commentDAO.insertComment(dto);
+    }
 
-        System.out.println("댓글 생성 완료!");
-
-        MyDBConnection.close(null, pstmt, con);
+    private static void SelectComment() {
+        System.out.println("댓글 찾기 페이지");
+        System.out.println("원하는 검색방법을 선택해 주세요");
     }
 
 
