@@ -34,7 +34,7 @@ public class CommentDAO {
 
     MyDBConnection.close(rs, pstmt, con);
 
-  }//end of insert
+  }//end of insertComment
 
   public List<CommentDTO> findAllComment() {
     List comments = new ArrayList<CommentDTO>();
@@ -63,7 +63,7 @@ public class CommentDAO {
       MyDBConnection.close(rs, pstmt, con);
     }
     return comments;
-  }
+  }//end of findAllComment
 
   public List<CommentDTO> findAllCommentByPostId(int post_id) {
     List comments = new ArrayList<CommentDTO>();
@@ -95,7 +95,7 @@ public class CommentDAO {
       MyDBConnection.close(rs, pstmt, con);
     }
     return comments;
-  }
+  }//end of findAllCommentByPostId
 
   public List<CommentDTO> findAllCommentByMemId(String mem_id) {
     List comments = new ArrayList<CommentDTO>();
@@ -127,5 +127,53 @@ public class CommentDAO {
       MyDBConnection.close(rs, pstmt, con);
     }
     return comments;
+  }//end of findAllCommentByMemID
+
+  public List<CommentDTO> findMemIdByCommentId(int comment_id) {
+    List comments = new ArrayList<CommentDTO>();
+
+    String sql = "select mem_id from Comment where comment_id=?";
+
+    try {
+      con = MyDBConnection.getConnection();
+      pstmt = con.prepareStatement(sql);
+
+      pstmt.setInt(1, comment_id);
+
+      rs = pstmt.executeQuery();
+
+      rs.next();
+
+      CommentDTO commentDTO = new CommentDTO();
+
+      commentDTO.setComment_id(rs.getInt("comment_id"));
+      commentDTO.setPost_id(rs.getInt("post_id"));
+      commentDTO.setMem_id(rs.getString("mem_id"));
+      commentDTO.setContent(rs.getString("content"));
+      commentDTO.setCreateTime(rs.getString("createTime"));
+
+     } catch (SQLException e){
+      e.printStackTrace();
+    }
+    return comments;
   }
-}
+
+  public void updateComment(CommentDTO commentDTO) {
+    String sql = "update comment set content=? where comment_id=?";
+
+    try {
+      con = MyDBConnection.getConnection();
+      pstmt = con.prepareStatement(sql);
+      pstmt.setString(1, commentDTO.content);
+      pstmt.setInt(2, commentDTO.post_id);
+
+      rs = pstmt.executeQuery();
+
+    } catch (SQLException e){
+      e.printStackTrace();
+    }
+  }
+
+
+
+}//end of class

@@ -50,15 +50,34 @@ public class CommentMain {
                     System.out.println("잘못된 값 입력");
             }
         }
-    }
+    }//end of main
 
     private static void DeleteComment() {
 
-    }
+    }//end of DeleteComment
 
     private static void UpdateComment() {
-        
-    }
+        System.out.println("댓글 수정 페이지");
+        System.out.println("본인의 ID 를 입력 해주세요");
+        System.out.print("ID 입력>>");
+        String mem_id01 = sc.nextLine();
+        System.out.println("수정하고자 하는 댓글의 번호를 입력해주세요");
+        System.out.print("댓글 번호 입력>>");
+        int comment_id = sc.nextInt();
+        if(commentDAO.findMemIdByCommentId(comment_id).contains(mem_id01)) {
+            System.out.println("게시글을 수정하시겟습니까?");
+            System.out.println("1.예 / 2.아니오");
+            System.out.print(">>");
+            String result = sc.nextLine();
+            if(result.equals("1")) {
+                System.out.println("수정하실 내용을 입력해 주세요");
+                System.out.println("기존 내용: " );
+                System.out.print(">>");
+            }
+        }else {
+            System.out.println("게시글은 본인만 삭제할 수 있습니다.");
+        }
+    }//end of UpdateComment
 
     private static void InsetComment() {
 
@@ -79,7 +98,7 @@ public class CommentMain {
         CommentDTO dto = new CommentDTO(post_id,mem_id,content,createTime);
 
         commentDAO.insertComment(dto);
-    }
+    }//end of InsertComment
 
     private static void SelectComment() {
         System.out.println("댓글 찾기 페이지");
@@ -102,7 +121,7 @@ public class CommentMain {
                 printAll(commentDAO.findAllCommentByMemId(mem_id));
                 break;
         }
-    }
+    }//end of SelectComment
 
     private static void printAll(List<CommentDTO> list) {
         System.out.println("\n===== 댓글 목록 =====");
@@ -110,7 +129,7 @@ public class CommentMain {
             System.out.println(comment); // toString 자동 호출
             System.out.println("--------------------------------");
         }
-    }
+    }//end of printAll
 
 
 }

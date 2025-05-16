@@ -14,6 +14,11 @@ public class CommentDTO {
         this.createTime = createTime;
     }
 
+    public CommentDTO(String mem_id, int comment_id) {
+        this.mem_id = mem_id;
+        this.comment_id = comment_id;
+    }
+
     public CommentDTO() {}
 
 
