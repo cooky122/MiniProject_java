@@ -96,6 +96,7 @@ public class CommentDAO {
     }
     return comments;
   }
+
   public List<CommentDTO> findAllCommentByMemId(String mem_id) {
     List comments = new ArrayList<CommentDTO>();
 
