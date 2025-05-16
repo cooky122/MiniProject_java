@@ -13,7 +13,7 @@ public class PostMain {
             System.out.println("1.게시글 작성 / 2.게시글 수정 / 3.게시글 삭제 / 4.게시글 검색");
 
             int select = scanner.nextInt();
-
+            scanner.nextLine();
             switch(select){
                 case 1:
                     insertProcess();
@@ -36,6 +36,22 @@ public class PostMain {
     private static void insertProcess() {
         Post post = new Post();
 
+        //게시판 선택
+        System.out.println("게시판 선택");
+        System.out.println("1. 공지게시판 / 2. 자유게시판");
+        int select = scanner.nextInt();
+        scanner.nextLine();
+
+        int board_id;
+        if(select == 1){
+            board_id = 1;
+        }else {
+            board_id = 2;
+        }
+
+        //작성자 설정
+        String mem_id = "user01";
+
         //제목 입력
         System.out.print("제목: ");
         String post_title = scanner.nextLine();
@@ -43,10 +59,23 @@ public class PostMain {
         System.out.println("내용: ");
         String content = scanner.nextLine();
 
-        System.out.println("공지글로 등록");
-        scanner.nextLine();
+        System.out.println("공지글로 등록(y/n)");
+        String a = scanner.nextLine();
 
+        boolean post_type;
+        if(a.equals("y")){
+            post_type = true;
+        }else{
+            post_type = false;
+        }
 
+        post.setBoard_id(board_id);
+        post.setMem_id(mem_id);
+        post.setPost_title(post_title);
+        post.setContent(content);
+        post.setPost_type(post_type);
+
+        postdao.insertPost(post);
     }
 
     private static void updateProcess() {
