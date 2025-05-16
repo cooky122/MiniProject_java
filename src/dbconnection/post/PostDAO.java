@@ -41,6 +41,30 @@ public class PostDAO {
     public List<Post> findPostAll() {
         List<Post> postList = new ArrayList<Post>();
 
+        String sql = "select * from post";
+        con = MyDBConnection.getConnection();
+
+        try{
+            pstmt = con.prepareStatement(sql);
+            rs = pstmt.executeQuery();
+
+            while(rs.next()){
+                Post post = new Post();
+
+                post.setBoard_id(rs.getInt("board_id"));
+                post.setPost_title( rs.getString("post_title"));
+                post.setMem_id(rs.getString("mem_id"));
+                post.setCreate_Time(rs.getString("create_Time"));
+                post.setView_count(rs.getInt("view_count"));
+
+                postList.add(post);
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            MyDBConnection.close(rs, pstmt, con);
+        }
+
         return postList;
     }
 

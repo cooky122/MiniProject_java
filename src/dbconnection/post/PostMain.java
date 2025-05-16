@@ -1,5 +1,7 @@
 package dbconnection.post;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class PostMain {
@@ -12,7 +14,7 @@ public class PostMain {
         //while 문으로 번호 입력받아서 crud 실행 코드 넣기
         while(true){
             //테이블 전체를 보여주는 메소드
-            //소속 게시판/제목/작성자/작성일/조회수
+            //소속 게시판/제목/작성자/작성일/조회수 순서로 출력
             printPostList();
 
             System.out.println("1.게시글 조회 / 2.게시글 작성 / 3.게시글 삭제 / 4.게시글 검색 / 5. 종료");
@@ -41,8 +43,23 @@ public class PostMain {
         }
     }
 
+    //전체 게시물 리스트로 출력
     private static void printPostList() {
+        List<Post> postList = new ArrayList<Post>();
 
+        postList = postdao.findPostAll();
+        Post row = new Post();
+        String board;
+
+        System.out.println("\t제목\t\t작성자\t작성일\t\t조회수");
+        for(int i=0; i<postList.size(); i++){
+            row = postList.get(i);
+
+            if(row.getBoard_id() == 1){
+                board = "공지";
+            }
+            //System.out.println(row.);
+        }
     }
 
     //insert 값을 입력받는 메소드
