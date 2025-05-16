@@ -7,32 +7,45 @@ public class PostMain {
     public static PostDAO postdao = new PostDAO();
 
     public static void start() {
+        System.out.println("<게시글 작성 페이지>");
+
         //while 문으로 번호 입력받아서 crud 실행 코드 넣기
         while(true){
-            System.out.println("게시글 작성 페이지");
-            System.out.println("1.게시글 작성 / 2.게시글 수정 / 3.게시글 삭제 / 4.게시글 검색");
+            //테이블 전체를 보여주는 메소드
+            //소속 게시판/제목/작성자/작성일/조회수
+            printPostList();
+
+            System.out.println("1.게시글 조회 / 2.게시글 작성 / 3.게시글 삭제 / 4.게시글 검색 / 5. 종료");
 
             int select = scanner.nextInt();
             scanner.nextLine();
-            switch(select){
+            if(select == 5)
+                break;
+
+            switch(select) {
                 case 1:
-                    insertProcess();
+                    insertProcess();    //insert 값을 입력받는 메소드
                     break;
                 case 2:
-                    updateProcess();
+                    updateProcess();    //update 값을 입력받는 메소드
                     break;
                 case 3:
-                    deleteProcess();
+                    deleteProcess();    //delete 값을 입력받는 메소드
                     break;
                 case 4:
-                    searchProcess();
+                    searchProcess();    //검색어를 입력받는 메소드
                     break;
-                default:
+               default:
                     break;
             }
         }
     }
 
+    private static void printPostList() {
+
+    }
+
+    //insert 값을 입력받는 메소드
     private static void insertProcess() {
         Post post = new Post();
 
@@ -48,17 +61,15 @@ public class PostMain {
         }else {
             board_id = 2;
         }
-
         //작성자 설정
         String mem_id = "user01";
-
         //제목 입력
         System.out.print("제목: ");
         String post_title = scanner.nextLine();
         //글 내용 입력
         System.out.println("내용: ");
         String content = scanner.nextLine();
-
+        //공지글 설정
         System.out.println("공지글로 등록(y/n)");
         String a = scanner.nextLine();
 
@@ -69,12 +80,14 @@ public class PostMain {
             post_type = false;
         }
 
+        //post dto 객체에 값 넣기
         post.setBoard_id(board_id);
         post.setMem_id(mem_id);
         post.setPost_title(post_title);
         post.setContent(content);
         post.setPost_type(post_type);
 
+        //PostDAO 의 insertPost 호출, db에 insert 수행
         postdao.insertPost(post);
     }
 
@@ -90,14 +103,3 @@ public class PostMain {
 
 
 }
-
-//        Post post = new Post();
-//        PostDAO dao = new PostDAO();
-//
-//        post.setBoard_id(1);
-//        post.setMem_id("user01");
-//        post.setPost_title("test");
-//        post.setContent("test content");
-//        post.setPost_type(false);
-//
-//        dao.insertPost(post);
