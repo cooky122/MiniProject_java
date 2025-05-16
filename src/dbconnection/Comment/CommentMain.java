@@ -26,7 +26,7 @@ public class CommentMain {
     private static CommentDTO commentDTO;
     private static CommentDAO commentDAO = new CommentDAO();
 
-    public static void main(String[] args) throws SQLException {
+    public static void Start(){
         while(true) {
             System.out.println("댓글 생성 메인 페이지");
             System.out.println("1.댓글 입력 / 2.댓글 수정 / 3.댓글 삭제 / 4.댓글 검색");
@@ -50,8 +50,7 @@ public class CommentMain {
                     System.out.println("잘못된 값 입력");
             }
         }
-    }//end of main
-
+    }
     private static void DeleteComment() {
 
     }//end of DeleteComment
@@ -60,11 +59,11 @@ public class CommentMain {
         System.out.println("댓글 수정 페이지");
         System.out.println("본인의 ID 를 입력 해주세요");
         System.out.print("ID 입력>>");
-        String mem_id01 = sc.nextLine();
+        String mem_id = sc.nextLine();
         System.out.println("수정하고자 하는 댓글의 번호를 입력해주세요");
         System.out.print("댓글 번호 입력>>");
         int comment_id = sc.nextInt();
-        if(commentDAO.findMemIdByCommentId(comment_id).contains(mem_id01)) {
+        if(commentDAO.isOwner(comment_id,mem_id)) {
             System.out.println("게시글을 수정하시겟습니까?");
             System.out.println("1.예 / 2.아니오");
             System.out.print(">>");
