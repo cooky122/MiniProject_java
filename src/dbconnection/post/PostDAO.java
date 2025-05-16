@@ -9,14 +9,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+//PostDAO 클래스
+//게시물 작업에 대해 DB와 연결
 public class PostDAO {
     Connection con = null;
     PreparedStatement pstmt  = null;
     ResultSet rs = null;
 
     public void insertPost(Post post){
-        String sql = "insert into post (board_id, mem_id, post_title, content, post_type)" +
-                "values (?, ?, ?, ?, ?)";
+        String sql = "insert into post (board_id, mem_id, post_title, content, post_type)" + "values (?, ?, ?, ?, ?)";
 
         con = MyDBConnection.getConnection();
 
