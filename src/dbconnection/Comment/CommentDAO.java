@@ -34,9 +34,9 @@ public class CommentDAO {
 
     MyDBConnection.close(rs, pstmt, con);
 
-  }//end of insert
+  }//end of insertComment
 
-  public List<CommentDTO> findALlComment() {
+  public List<CommentDTO> findAllComment() {
     List comments = new ArrayList<CommentDTO>();
 
     String sql = "select * from Comment order by comment_id desc";
@@ -63,18 +63,19 @@ public class CommentDAO {
       MyDBConnection.close(rs, pstmt, con);
     }
     return comments;
-  }
+  }//end of findAllComment
 
-  public List<CommentDTO> findALlCommentByPostId(int post_id) {
+  public List<CommentDTO> findAllCommentByPostId(int post_id) {
     List comments = new ArrayList<CommentDTO>();
 
-    String sql = "select * from Comment where post_id=? order by comment_id desc";
+    String sql = "select * from Comment where post_id=? order by createTime desc";
 
     try{
-      pstmt.setInt(1, post_id);
-
       con = MyDBConnection.getConnection();
       pstmt = con.prepareStatement(sql);
+
+      pstmt.setInt(1, post_id);
+
       rs = pstmt.executeQuery();
 
       while (rs.next()) {
@@ -96,19 +97,83 @@ public class CommentDAO {
     return comments;
   }//end of findAllCommentByPostId
 
-  /*public int getCommentId() throws SQLException {
-    String sql = "select max(comment_id)+1 from comment";
+  public List<CommentDTO> findAllCommentByMemId(String mem_id) {
+    List comments = new ArrayList<CommentDTO>();
 
+    String sql = "select * from Comment where mem_id=? order by createTime desc";
+
+    try{
       con = MyDBConnection.getConnection();
       pstmt = con.prepareStatement(sql);
-      rs=pstmt.executeQuery();
+
+      pstmt.setString(1, mem_id);
+
+      rs = pstmt.executeQuery();
+
+      while (rs.next()) {
+        CommentDTO commentDTO = new CommentDTO();
+
+        commentDTO.setComment_id(rs.getInt("comment_id"));
+        commentDTO.setPost_id(rs.getInt("post_id"));
+        commentDTO.setMem_id(rs.getString("mem_id"));
+        commentDTO.setContent(rs.getString("content"));
+        commentDTO.setCreateTime(rs.getString("createTime"));
+
+        comments.add(commentDTO);
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }finally {
+      MyDBConnection.close(rs, pstmt, con);
+    }
+    return comments;
+  }//end of findAllCommentByMemID
+
+  public List<CommentDTO> findMemIdByCommentId(int comment_id) {
+    List comments = new ArrayList<CommentDTO>();
+
+    String sql = "select mem_id from Comment where comment_id=?";
+
+    try {
+      con = MyDBConnection.getConnection();
+      pstmt = con.prepareStatement(sql);
+
+      pstmt.setInt(1, comment_id);
+
+      rs = pstmt.executeQuery();
 
       rs.next();
 
-      int lastCommentId = rs.getInt(1);
+      CommentDTO commentDTO = new CommentDTO();
 
-      MyDBConnection.close(rs, pstmt, con);
+      commentDTO.setComment_id(rs.getInt("comment_id"));
+      commentDTO.setPost_id(rs.getInt("post_id"));
+      commentDTO.setMem_id(rs.getString("mem_id"));
+      commentDTO.setContent(rs.getString("content"));
+      commentDTO.setCreateTime(rs.getString("createTime"));
 
-    return lastCommentId;
-  }*/
-}
+     } catch (SQLException e){
+      e.printStackTrace();
+    }
+    return comments;
+  }
+
+  public void updateComment(CommentDTO commentDTO) {
+    String sql = "update comment set content=? where comment_id=?";
+
+    try {
+      con = MyDBConnection.getConnection();
+      pstmt = con.prepareStatement(sql);
+      pstmt.setString(1, commentDTO.content);
+      pstmt.setInt(2, commentDTO.post_id);
+
+      rs = pstmt.executeQuery();
+
+    } catch (SQLException e){
+      e.printStackTrace();
+    }
+  }
+
+
+
+}//end of class
