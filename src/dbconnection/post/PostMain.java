@@ -21,15 +21,15 @@ public class PostMain {
 
             int select = scanner.nextInt();
             scanner.nextLine();
-            if(select == 5)
+            if(select == 5) //입력 종료
                 break;
 
             switch(select) {
                 case 1:
-                    insertProcess();    //insert 값을 입력받는 메소드
+                    readProcess();    //게시글 조회 메소드
                     break;
                 case 2:
-                    updateProcess();    //update 값을 입력받는 메소드
+                    insertProcess();    //게시글 작성 메소드
                     break;
                 case 3:
                     deleteProcess();    //delete 값을 입력받는 메소드
@@ -43,23 +43,71 @@ public class PostMain {
         }
     }
 
+    private static void readProcess() {
+        System.out.print("조회할 게시글 번호 > ");
+        int selectPost = scanner.nextInt();
+        scanner.nextLine();
+
+        Post post = postdao.findPost(selectPost);
+        System.out.println(post);
+        System.out.println();
+
+        //조회 후 댓글crud로 이동하거나 좋아요 누를지 말지 선택, view_count 업데이트
+        //댓글 crud 이동은 commentMain에서 그대로 가져왔습니다.
+        System.out.println("1.댓글 입력 / 2.댓글 수정 / 3.댓글 삭제 / 4.댓글 검색 / 5.좋아요 / 6.게시글 수정 / 7.목록으로 돌아기기");
+        int selectAC = scanner.nextInt();
+        scanner.nextLine();
+
+        switch (selectAC) {
+            case 1:
+                //InsetComment();
+                break;
+            case 2:
+                //UpdateComment();
+                break;
+            case 3:
+                //DeleteComment();
+                break;
+            case 4:
+                //SelectComment();
+                break;
+            case 5:
+                postdao.updateLike(selectPost);
+                break;
+            case 6:
+                //게시글 수정 메소드
+                updateProcess(post);
+                break;
+            case 7:
+                //별도의 액션 없이 메뉴로 돌아가기
+                break;
+            default:
+                System.out.println("잘못된 값 입력");
+        }
+    }
+
     //전체 게시물 리스트로 출력
     private static void printPostList() {
         List<Post> postList = new ArrayList<Post>();
 
         postList = postdao.findPostAll();
         Post row = new Post();
-        String board;
+        String board="";
 
-        System.out.println("\t제목\t\t작성자\t작성일\t\t조회수");
-        for(int i=0; i<postList.size(); i++){
-            row = postList.get(i);
+        System.out.println("번호 | 게시판 | 제목 | 작성자 | 작성일 | 조회수");
+        System.out.println("-------------------------------------");
+        for (Post post : postList) {
+            row = post;
 
-            if(row.getBoard_id() == 1){
+            if (row.getBoard_id() == 1) {
                 board = "공지";
+            } else {
+                board = "일반";
             }
-            //System.out.println(row.);
+            System.out.println(row.getPost_id() + "\t" + board + "\t" + row.getPost_title() + "\t" + row.getMem_id()
+                    + "\t" + row.getCreate_Time() + "\t\t" + row.getView_count());
         }
+        System.out.println();
     }
 
     //insert 값을 입력받는 메소드
@@ -108,7 +156,8 @@ public class PostMain {
         postdao.insertPost(post);
     }
 
-    private static void updateProcess() {
+    private static void updateProcess(Post post) {
+
     }
 
     private static void deleteProcess() {

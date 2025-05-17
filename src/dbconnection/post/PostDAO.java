@@ -37,6 +37,33 @@ public class PostDAO {
             MyDBConnection.close(rs, pstmt, con);
         }
     }
+    public Post findPost(int post_id){
+        Post post = new Post();
+
+        String sql = "select * from post where post_id=?";
+        con = MyDBConnection.getConnection();
+
+        try{
+            pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, post_id);
+            rs = pstmt.executeQuery();
+
+            rs.next();
+            post.setBoard_id(rs.getInt("board_id"));
+            post.setMem_id(rs.getString("mem_id"));
+            post.setPost_title(rs.getString("post_title"));
+            post.setContent(rs.getString("content"));
+            post.setCreate_Time(rs.getString("create_Time"));
+            post.setView_count(rs.getInt("view_count"));
+            post.setLike_count(rs.getInt("like_count"));
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            MyDBConnection.close(rs, pstmt, con);
+        }
+
+        return post;
+    }
 
     public List<Post> findPostAll() {
         List<Post> postList = new ArrayList<Post>();
@@ -51,6 +78,7 @@ public class PostDAO {
             while(rs.next()){
                 Post post = new Post();
 
+                post.setPost_id(rs.getInt("post_id"));
                 post.setBoard_id(rs.getInt("board_id"));
                 post.setPost_title( rs.getString("post_title"));
                 post.setMem_id(rs.getString("mem_id"));
@@ -74,5 +102,21 @@ public class PostDAO {
 
     public void deletePost(Post post) {
 
+    }
+
+    public void updateLike(int post_id) {
+        String sql = "update post set like_count = like_count+1 where post_id=?";
+
+        con = MyDBConnection.getConnection();
+
+        try {
+            pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, post_id);
+            pstmt.executeUpdate();
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            MyDBConnection.close(rs, pstmt, con);
+        }
     }
 }

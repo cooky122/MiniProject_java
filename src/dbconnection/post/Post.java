@@ -95,9 +95,9 @@ public class Post {
     @Override
     public String toString() {
         return
-                "게시판: <" + board_id + "> 작성자: " + mem_id + "\n" +
+                "게시판: <" + board_id + "> | 작성자: " + mem_id + "\n" +
                 "제목: " + post_title + "\n" +
                 "내용:\n" + content + "\n" +
-                "작성일: " + create_Time + " | 조회수:" + view_count + " | 좋아요: " + like_count;
+                "작성일: " + create_Time + " | 조회수:" + view_count + " | 좋아요: " + like_count + "\n";
     }
 }
