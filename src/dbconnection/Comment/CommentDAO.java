@@ -13,7 +13,7 @@ public class CommentDAO {
   Connection con = null;
   PreparedStatement pstmt = null;
   ResultSet rs = null;
-
+// <editor-fold desc="추가"
   public void insertComment(CommentDTO commentDTO) {
     String sql = "insert into comment (post_id, mem_id, content, createTime) values (?,?,?,?)";
 
@@ -34,7 +34,9 @@ public class CommentDAO {
     MyDBConnection.close(rs, pstmt, con);
 
   }//end of insertComment
+// </editor-fold>
 
+// <editor-fold desc="검색">
   public List<CommentDTO> findAllComment() {
     List<CommentDTO> comments = new ArrayList<>();
 
@@ -99,6 +101,31 @@ public class CommentDAO {
     return comments;
   }//end of findAllCommentByMemID
 
+  public List<CommentDTO> findCommentByPostId(int comment_id) {
+    List<CommentDTO> comments = new ArrayList<>();
+
+    String sql = "select * from Comment where comment_id=?";
+
+    try {
+      con = MyDBConnection.getConnection();
+      pstmt = con.prepareStatement(sql);
+
+      pstmt.setInt(1,comment_id);
+
+      rs = pstmt.executeQuery();
+
+      SetResult(rs,comments);
+    } catch (SQLException e){
+      e.printStackTrace();
+    } finally {
+      MyDBConnection.close(rs, pstmt, con);
+    }
+    return comments;
+  }//end of findCommentByPostId
+
+  // </editor-fold>
+
+// <editor-fold desc="수정 && 삭제">
   public boolean isOwner(int comment_id,String mem_id) {
     String sql = "select * from Comment where comment_id=? and mem_id=?";
 
@@ -122,24 +149,44 @@ public class CommentDAO {
     return false;
   }//end of isOwner
 
-  public void updateComment(CommentDTO commentDTO) {
+  public void updateComment(String content, int comment_id) {
     String sql = "update comment set content=? where comment_id=?";
 
     try {
       con = MyDBConnection.getConnection();
       pstmt = con.prepareStatement(sql);
 
-      pstmt.setString(1, commentDTO.content);
-      pstmt.setInt(2, commentDTO.post_id);
+      pstmt.setString(1, content);
+      pstmt.setInt(2, comment_id);
 
-      rs = pstmt.executeQuery();
+      pstmt.executeUpdate();
 
     } catch (SQLException e){
       e.printStackTrace();
+    } finally {
+      MyDBConnection.close(rs, pstmt, con);
     }
   }//end of updateComment
 
+public void deleteComment(int comment_id) {
+    String sql = "delete from comment where comment_id=?";
 
+    try {
+      con = MyDBConnection.getConnection();
+      pstmt = con.prepareStatement(sql);
+
+      pstmt.setInt(1,comment_id);
+
+      pstmt.executeUpdate();
+    } catch (SQLException e){
+      e.printStackTrace();
+    } finally {
+      MyDBConnection.close(rs, pstmt, con);
+    }
+}
+
+//</editor-fold>
+//<editor-fold desc="작업 편의용">
   //각 Select 에서 불러오는 값을 넣는 과정 메서드화
   private void SetResult(ResultSet rs,List<CommentDTO> comments) throws SQLException {
     while (rs.next()) {
@@ -154,5 +201,5 @@ public class CommentDAO {
       comments.add(commentDTO);
     }
   }//end of SetResult
-
+//</editor-fold>
 }//end of class
