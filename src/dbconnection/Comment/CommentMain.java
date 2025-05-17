@@ -26,10 +26,11 @@ public class CommentMain {
     private static CommentDTO commentDTO;
     private static CommentDAO commentDAO = new CommentDAO();
 
-    public static void main(String[] args) throws SQLException {
+//<editor-fold desc="시작 선택지"
+    public static void Start(){
         while(true) {
             System.out.println("댓글 생성 메인 페이지");
-            System.out.println("1.댓글 입력 / 2.댓글 수정 / 3.댓글 삭제 / 4.댓글 검색");
+            System.out.println("1.댓글 입력 / 2.댓글 수정/삭제 / 3.댓글 검색");
             String ans = sc.nextLine();
             switch (ans) {
                 case "1":
@@ -39,9 +40,6 @@ public class CommentMain {
                     UpdateComment();
                     break;
                 case "3":
-                    DeleteComment();
-                    break;
-                case "4":
                     SelectComment();
                     break;
                 case "100":
@@ -50,35 +48,46 @@ public class CommentMain {
                     System.out.println("잘못된 값 입력");
             }
         }
-    }//end of main
+    }
+//</editor-fold>
 
-    private static void DeleteComment() {
-
-    }//end of DeleteComment
-
+//<editor-fold desc="삭제/수정">
     private static void UpdateComment() {
         System.out.println("댓글 수정 페이지");
         System.out.println("본인의 ID 를 입력 해주세요");
         System.out.print("ID 입력>>");
-        String mem_id01 = sc.nextLine();
-        System.out.println("수정하고자 하는 댓글의 번호를 입력해주세요");
+        String mem_id = sc.nextLine();
+        System.out.println("수정/삭제 하고자 하는 댓글의 번호를 입력해주세요");
         System.out.print("댓글 번호 입력>>");
-        int comment_id = sc.nextInt();
-        if(commentDAO.findMemIdByCommentId(comment_id).contains(mem_id01)) {
-            System.out.println("게시글을 수정하시겟습니까?");
-            System.out.println("1.예 / 2.아니오");
+        int comment_id = Integer.parseInt(sc.nextLine());
+        if(commentDAO.isOwner(comment_id,mem_id)) {
+            System.out.println("게시글을 수정/삭제 하시겠습니까?");
+            System.out.println("1수정 / 2.삭제 / 3.취소");
             System.out.print(">>");
             String result = sc.nextLine();
             if(result.equals("1")) {
                 System.out.println("수정하실 내용을 입력해 주세요");
-                System.out.println("기존 내용: " );
+                System.out.println("기존 내용: " + printContent(commentDAO.findCommentByPostId(comment_id)));
                 System.out.print(">>");
+                String content = sc.nextLine();
+                commentDAO.updateComment(content,comment_id);
+            }
+            else if(result.equals("2")) {
+                System.out.println("정말로 삭제하시겠습니까?");
+                System.out.println("1.삭제 / 2.취소");
+                System.out.print(">>");
+                result = sc.nextLine();
+                if(result.equals("1")) {
+                    commentDAO.deleteComment(comment_id);
+                }
             }
         }else {
-            System.out.println("게시글은 본인만 삭제할 수 있습니다.");
+            System.out.println("게시글은 본인만 수정/삭제할 수 있습니다.");
         }
     }//end of UpdateComment
+//</editor-fold>
 
+//<editor-fold desc="삽입">
     private static void InsetComment() {
 
         System.out.println("댓글 입력 페이지");
@@ -99,7 +108,9 @@ public class CommentMain {
 
         commentDAO.insertComment(dto);
     }//end of InsertComment
+//</editor-fold>
 
+//<editor-fold desc="검색">
     private static void SelectComment() {
         System.out.println("댓글 찾기 페이지");
         System.out.println("원하는 검색방법을 선택해 주세요");
@@ -122,7 +133,9 @@ public class CommentMain {
                 break;
         }
     }//end of SelectComment
-
+//</editor-fold>
+    
+//<editor-fold desc="내용 출력">
     private static void printAll(List<CommentDTO> list) {
         System.out.println("\n===== 댓글 목록 =====");
         for (CommentDTO comment : list ) {
@@ -130,6 +143,11 @@ public class CommentMain {
             System.out.println("--------------------------------");
         }
     }//end of printAll
+    private static String printContent(List<CommentDTO> list) {
+        CommentDTO commentDTO = list.getFirst();
 
+        return  commentDTO.content;
+    }//end of printContent
+//</editor-fold>
 
 }
