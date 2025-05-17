@@ -54,10 +54,10 @@ public class PostMain {
 
         //좋아요 누를지 말지 선택, view_count 업데이트
         System.out.println(" 1.좋아요 / 2.게시글 수정 / 3.게시글 수정");
-        int selectPost = scanner.nextInt();
+        int selectACT = scanner.nextInt();
         scanner.nextLine();
 
-        switch (){
+        switch (selectACT){
 
         }
         //댓글 crud 이동은 commentMain에서 그대로 가져왔습니다.
