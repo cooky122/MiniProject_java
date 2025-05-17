@@ -52,38 +52,17 @@ public class PostMain {
         System.out.println(post);
         System.out.println();
 
-        //조회 후 댓글crud로 이동하거나 좋아요 누를지 말지 선택, view_count 업데이트
-        //댓글 crud 이동은 commentMain에서 그대로 가져왔습니다.
-        System.out.println("1.댓글 입력 / 2.댓글 수정 / 3.댓글 삭제 / 4.댓글 검색 / 5.좋아요 / 6.게시글 수정 / 7.목록으로 돌아기기");
-        int selectAC = scanner.nextInt();
+        //좋아요 누를지 말지 선택, view_count 업데이트
+        System.out.println(" 1.좋아요 / 2.게시글 수정 / 3.게시글 수정");
+        int selectPost = scanner.nextInt();
         scanner.nextLine();
 
-        switch (selectAC) {
-            case 1:
-                //InsetComment();
-                break;
-            case 2:
-                //UpdateComment();
-                break;
-            case 3:
-                //DeleteComment();
-                break;
-            case 4:
-                //SelectComment();
-                break;
-            case 5:
-                postdao.updateLike(selectPost);
-                break;
-            case 6:
-                //게시글 수정 메소드
-                updateProcess(post);
-                break;
-            case 7:
-                //별도의 액션 없이 메뉴로 돌아가기
-                break;
-            default:
-                System.out.println("잘못된 값 입력");
+        switch (){
+
         }
+        //댓글 crud 이동은 commentMain에서 그대로 가져왔습니다.
+        //여기에 댓글 CRUD 기능 삽입
+
     }
 
     //전체 게시물 리스트로 출력
