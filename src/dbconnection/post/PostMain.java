@@ -51,16 +51,24 @@ public class PostMain {
         Post post = postdao.findPost(selectPost);
         System.out.println(post);
         System.out.println();
+        postdao.updateView(selectPost); //view_count 업데이트
 
-        //좋아요 누를지 말지 선택, view_count 업데이트
-        System.out.println(" 1.좋아요 / 2.게시글 수정 / 3.게시글 수정");
+        //좋아요 누를지 말지 선택
+        System.out.println(" 1.좋아요 / 2.게시글 수정 / 3.다음");
         int selectACT = scanner.nextInt();
         scanner.nextLine();
 
         switch (selectACT){
-
+            case 1:
+                postdao.updateLike(selectPost); //좋아요 선택시 좋아요 업데이트
+                break;
+            case 2:
+                updateProcess(post); //게시글 수정 선택시 update 메소드 호출
+                break;
+            default:
+                break;
         }
-        //댓글 crud 이동은 commentMain에서 그대로 가져왔습니다.
+
         //여기에 댓글 CRUD 기능 삽입
 
     }
@@ -136,7 +144,19 @@ public class PostMain {
     }
 
     private static void updateProcess(Post post) {
+        System.out.println("<게시글 수정 페이지>");
+        System.out.println(post);
+        System.out.println();
 
+        System.out.print("제목 수정: ");
+        String edit_title = scanner.nextLine();
+        post.setPost_title(edit_title);
+
+        System.out.println("내용 수정: ");
+        String edit_content = scanner.nextLine();
+        post.setContent(edit_content);
+
+        postdao.updatePost(post);
     }
 
     private static void deleteProcess() {
