@@ -81,7 +81,7 @@ public class PostMain {
         Post row = new Post();
         String board="";
 
-        System.out.println("번호 | 게시판 | 제목 | 작성자 | 작성일 | 조회수");
+        System.out.println("게시글 아이디 | 게시판 | 제목 | 작성자 | 작성일 | 조회수");
         System.out.println("-------------------------------------");
         for (Post post : postList) {
             row = post;
@@ -160,11 +160,16 @@ public class PostMain {
     }
 
     private static void deleteProcess() {
+        System.out.print("삭제할 게시글 번호 > ");
+        int selectPost = scanner.nextInt();
+        scanner.nextLine();
+
+        postdao.deletePost(selectPost);
+        System.out.println();
+
+        System.out.println("게시글이 삭제되었습니다.\n");
     }
 
     private static void searchProcess() {
     }
-
-
-
 }

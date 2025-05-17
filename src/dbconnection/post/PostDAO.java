@@ -117,8 +117,21 @@ public class PostDAO {
         }
     }
 
-    public void deletePost(Post post) {
+    public void deletePost(int post_id) {
+        String sql = "delete from post where post_id=?";
 
+        con = MyDBConnection.getConnection();
+
+        try{
+            pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, post_id);
+
+            pstmt.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            MyDBConnection.close(rs, pstmt, con);
+        }
     }
 
     public void updateLike(int post_id) {
