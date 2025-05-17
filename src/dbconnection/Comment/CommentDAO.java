@@ -186,6 +186,7 @@ public void deleteComment(int comment_id) {
 }
 
 //</editor-fold>
+
 //<editor-fold desc="작업 편의용">
   //각 Select 에서 불러오는 값을 넣는 과정 메서드화
   private void SetResult(ResultSet rs,List<CommentDTO> comments) throws SQLException {
