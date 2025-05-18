@@ -166,13 +166,13 @@ public class PostDAO {
         }
     }
 
-    public List<Post> serachPost(int i, String dateQuery, String keyword) {
+    public List<Post> searchPost(int i, String dateQuery, String keyword) {
         List<Post> searchPost = new ArrayList<>();
 
         String sql = switch (i) {
             case 1 -> "select * from post where post_title like '%"+ keyword +"%'";
             case 2 -> "select * from post where content like '%"+ keyword +"%'";
-            case 3 -> "select * from post where post_title like '%"+ keyword +"%' or content like '%+ keyword +%'";
+            case 3 -> "select * from post where post_title like '%"+ keyword +"%' or content like '%"+ keyword +"%'";
             default -> throw new IllegalStateException("입력 오류");
         };
 
