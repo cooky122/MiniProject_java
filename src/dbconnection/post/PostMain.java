@@ -54,20 +54,24 @@ public class PostMain {
         System.out.println();
         postdao.updateView(selectPost); //view_count 업데이트
 
-        //좋아요 누를지 말지 선택
-        System.out.println(" 1.좋아요 / 2.게시글 수정 / 3.다음");
-        int selectACT = scanner.nextInt();
-        scanner.nextLine();
+        while(true) {
+            //좋아요 누를지 말지 선택
+            System.out.println(" 1.좋아요 / 2.게시글 수정 / 3.다음");
+            int selectACT = scanner.nextInt();
+            scanner.nextLine();
 
-        switch (selectACT){
-            case 1:
+            if(selectACT == 3){
+                break;
+            }else if(selectACT == 1){
                 postdao.updateLike(selectPost); //좋아요 선택시 좋아요 업데이트
                 break;
-            case 2:
+            }else if(selectACT == 2){
                 updateProcess(post); //게시글 수정 선택시 update 메소드 호출
-                break;
-            default:
-                break;
+                continue;
+            }else{
+                System.out.println("잘못된 입력입니다.");
+                continue;
+            }
         }
 
         //여기에 댓글 CRUD 기능 삽입
@@ -209,13 +213,13 @@ public class PostMain {
 
         switch (selectNum){
             case 2:
-                searchPost = postdao.serachPost(2, dateQuery, keyword);
+                searchPost = postdao.searchPost(2, dateQuery, keyword);
                 break;
             case 3:
-                searchPost = postdao.serachPost(3, dateQuery, keyword);
+                searchPost = postdao.searchPost(3, dateQuery, keyword);
                 break;
             default:
-                searchPost = postdao.serachPost(1, dateQuery, keyword);
+                searchPost = postdao.searchPost(1, dateQuery, keyword);
                 break;
         }
 
