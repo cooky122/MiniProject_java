@@ -1,5 +1,6 @@
 package dbconnection.post;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -171,5 +172,67 @@ public class PostMain {
     }
 
     private static void searchProcess() {
+        List<Post> searchPost = new ArrayList<>();
+
+        LocalDate now = LocalDate.now();
+        System.out.println(now);
+        String dateQuery = "create_Time > date_add(now(), interval -1";
+        String keyword = "";
+
+        System.out.println("기간 선택");
+        System.out.println("1.전체 | 2.지난 1년 | 3.지난 1달");
+        int selectNum = scanner.nextInt();
+        scanner.nextLine();
+
+        switch (selectNum){
+            case 1:
+                dateQuery = ""; //기간을 전체로 하면 dateQuery가 필요하지 않기 때문에 초기화
+                break;
+            case 2:
+                dateQuery += " year";   //기간 1년으로 설정
+                break;
+            case 3:
+                dateQuery += " month";  //기간 1달로 설정
+                break;
+            default:
+                dateQuery = ""; //선택 없으면 기본으로 전체 기간 선택
+                break;
+        }
+
+        System.out.println("검색 범위를 선택하세요");
+        System.out.println("1.제목 | 2.내용 | 3.제목+내용");
+        selectNum = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.print("검색어를 입력하세요 >");
+        keyword = scanner.nextLine();
+
+        switch (selectNum){
+            case 2:
+                searchPost = postdao.serachPost(2, dateQuery, keyword);
+                break;
+            case 3:
+                searchPost = postdao.serachPost(3, dateQuery, keyword);
+                break;
+            default:
+                searchPost = postdao.serachPost(1, dateQuery, keyword);
+                break;
+        }
+
+        String board;
+        System.out.println("게시글 아이디 | 게시판 | 제목 | 작성자 | 작성일 | 조회수");
+        System.out.println("-------------------------------------");
+        for (Post post : searchPost) {
+            Post row = post;
+
+            if (row.getBoard_id() == 1) {
+                board = "공지";
+            } else {
+                board = "일반";
+            }
+            System.out.println(row.getPost_id() + "\t" + board + "\t" + row.getPost_title() + "\t" + row.getMem_id()
+                    + "\t" + row.getCreate_Time() + "\t\t" + row.getView_count());
+        }
+        System.out.println();
     }
 }

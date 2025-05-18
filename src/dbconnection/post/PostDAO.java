@@ -165,4 +165,40 @@ public class PostDAO {
             MyDBConnection.close(rs, pstmt, con);
         }
     }
+
+    public List<Post> serachPost(int i, String dateQuery, String keyword) {
+        List<Post> searchPost = new ArrayList<>();
+
+        String sql = switch (i) {
+            case 1 -> "select * from post where post_title like '%"+ keyword +"%'";
+            case 2 -> "select * from post where content like '%"+ keyword +"%'";
+            case 3 -> "select * from post where post_title like '%"+ keyword +"%' or content like '%+ keyword +%'";
+            default -> throw new IllegalStateException("입력 오류");
+        };
+
+        con = MyDBConnection.getConnection();
+
+        try{
+            pstmt = con.prepareStatement(sql);
+            rs = pstmt.executeQuery();
+
+            while(rs.next()){
+                Post post = new Post();
+                post.setPost_id(rs.getInt("post_id"));
+                post.setBoard_id(rs.getInt("board_id"));
+                post.setPost_title( rs.getString("post_title"));
+                post.setMem_id(rs.getString("mem_id"));
+                post.setCreate_Time(rs.getString("create_Time"));
+                post.setView_count(rs.getInt("view_count"));
+
+                searchPost.add(post);
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            MyDBConnection.close(rs, pstmt, con);
+        }
+
+        return searchPost;
+    }
 }
