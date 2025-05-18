@@ -38,6 +38,35 @@ public class PostDAO {
         }
     }
 
+    public Post findPost(int post_id){
+        Post post = new Post();
+
+        String sql = "select * from post where post_id=?";
+        con = MyDBConnection.getConnection();
+
+        try{
+            pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, post_id);
+            rs = pstmt.executeQuery();
+
+            rs.next();
+            post.setPost_id(rs.getInt("post_id"));
+            post.setBoard_id(rs.getInt("board_id"));
+            post.setMem_id(rs.getString("mem_id"));
+            post.setPost_title(rs.getString("post_title"));
+            post.setContent(rs.getString("content"));
+            post.setCreate_Time(rs.getString("create_Time"));
+            post.setView_count(rs.getInt("view_count"));
+            post.setLike_count(rs.getInt("like_count"));
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            MyDBConnection.close(rs, pstmt, con);
+        }
+
+        return post;
+    }
+
     public List<Post> findPostAll() {
         List<Post> postList = new ArrayList<Post>();
 
@@ -51,6 +80,7 @@ public class PostDAO {
             while(rs.next()){
                 Post post = new Post();
 
+                post.setPost_id(rs.getInt("post_id"));
                 post.setBoard_id(rs.getInt("board_id"));
                 post.setPost_title( rs.getString("post_title"));
                 post.setMem_id(rs.getString("mem_id"));
@@ -69,10 +99,106 @@ public class PostDAO {
     }
 
     public void updatePost(Post post) {
+        String sql = "update post set post_title=?, content=? where post_id=?";
 
+        con = MyDBConnection.getConnection();
+
+        try {
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, post.getPost_title());
+            pstmt.setString(2, post.getContent());
+            pstmt.setInt(3, post.getPost_id());
+
+            pstmt.executeUpdate();
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            MyDBConnection.close(rs, pstmt, con);
+        }
     }
 
-    public void deletePost(Post post) {
+    public void deletePost(int post_id) {
+        String sql = "delete from post where post_id=?";
 
+        con = MyDBConnection.getConnection();
+
+        try{
+            pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, post_id);
+
+            pstmt.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            MyDBConnection.close(rs, pstmt, con);
+        }
+    }
+
+    public void updateLike(int post_id) {
+        String sql = "update post set like_count = like_count+1 where post_id=?";
+
+        con = MyDBConnection.getConnection();
+
+        try {
+            pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, post_id);
+            pstmt.executeUpdate();
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            MyDBConnection.close(rs, pstmt, con);
+        }
+    }
+
+    public void updateView(int post_id) {
+        String sql = "update post set view_count = view_count+1 where post_id=?";
+
+        con = MyDBConnection.getConnection();
+
+        try {
+            pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, post_id);
+            pstmt.executeUpdate();
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            MyDBConnection.close(rs, pstmt, con);
+        }
+    }
+
+    public List<Post> searchPost(int i, String dateQuery, String keyword) {
+        List<Post> searchPost = new ArrayList<>();
+
+        String sql = switch (i) {
+            case 1 -> "select * from post where post_title like '%"+ keyword +"%'";
+            case 2 -> "select * from post where content like '%"+ keyword +"%'";
+            case 3 -> "select * from post where post_title like '%"+ keyword +"%' or content like '%"+ keyword +"%'";
+            default -> throw new IllegalStateException("입력 오류");
+        };
+
+        con = MyDBConnection.getConnection();
+
+        try{
+            pstmt = con.prepareStatement(sql);
+            rs = pstmt.executeQuery();
+
+            while(rs.next()){
+                Post post = new Post();
+                post.setPost_id(rs.getInt("post_id"));
+                post.setBoard_id(rs.getInt("board_id"));
+                post.setPost_title( rs.getString("post_title"));
+                post.setMem_id(rs.getString("mem_id"));
+                post.setCreate_Time(rs.getString("create_Time"));
+                post.setView_count(rs.getInt("view_count"));
+
+                searchPost.add(post);
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            MyDBConnection.close(rs, pstmt, con);
+        }
+
+        return searchPost;
     }
 }
