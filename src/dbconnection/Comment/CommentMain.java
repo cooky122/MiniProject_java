@@ -1,11 +1,5 @@
 package dbconnection.Comment;
 
-import dbconnection.MyDBConnection;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -26,7 +20,7 @@ public class CommentMain {
     private static CommentDTO commentDTO;
     private static CommentDAO commentDAO = new CommentDAO();
 
-//<editor-fold desc="시작 선택지"
+//<editor-fold desc="시작 선택지">
     public static void Start(){
         while(true) {
             System.out.println("댓글 생성 메인 페이지");
