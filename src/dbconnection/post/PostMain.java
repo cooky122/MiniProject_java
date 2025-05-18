@@ -1,5 +1,6 @@
 package dbconnection.post;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -21,15 +22,15 @@ public class PostMain {
 
             int select = scanner.nextInt();
             scanner.nextLine();
-            if(select == 5)
+            if(select == 5) //입력 종료
                 break;
 
             switch(select) {
                 case 1:
-                    insertProcess();    //insert 값을 입력받는 메소드
+                    readProcess();    //게시글 조회 메소드
                     break;
                 case 2:
-                    updateProcess();    //update 값을 입력받는 메소드
+                    insertProcess();    //게시글 작성 메소드
                     break;
                 case 3:
                     deleteProcess();    //delete 값을 입력받는 메소드
@@ -43,23 +44,58 @@ public class PostMain {
         }
     }
 
+    private static void readProcess() {
+        System.out.print("조회할 게시글 번호 > ");
+        int selectPost = scanner.nextInt();
+        scanner.nextLine();
+
+        Post post = postdao.findPost(selectPost);
+        System.out.println(post);
+        System.out.println();
+        postdao.updateView(selectPost); //view_count 업데이트
+
+        //좋아요 누를지 말지 선택
+        System.out.println(" 1.좋아요 / 2.게시글 수정 / 3.다음");
+        int selectACT = scanner.nextInt();
+        scanner.nextLine();
+
+        switch (selectACT){
+            case 1:
+                postdao.updateLike(selectPost); //좋아요 선택시 좋아요 업데이트
+                break;
+            case 2:
+                updateProcess(post); //게시글 수정 선택시 update 메소드 호출
+                break;
+            default:
+                break;
+        }
+
+        //여기에 댓글 CRUD 기능 삽입
+
+    }
+
     //전체 게시물 리스트로 출력
     private static void printPostList() {
         List<Post> postList = new ArrayList<Post>();
 
         postList = postdao.findPostAll();
         Post row = new Post();
-        String board;
+        String board="";
 
-        System.out.println("\t제목\t\t작성자\t작성일\t\t조회수");
-        for(int i=0; i<postList.size(); i++){
-            row = postList.get(i);
+        System.out.println("게시글 아이디 | 게시판 | 제목 | 작성자 | 작성일 | 조회수");
+        System.out.println("-------------------------------------");
+        for (Post post : postList) {
+            row = post;
 
-            if(row.getBoard_id() == 1){
+            if (row.getBoard_id() == 1) {
                 board = "공지";
+            } else {
+                board = "일반";
             }
-            //System.out.println(row.);
+            System.out.println(row.getPost_id() + "\t" + board + "\t" + row.getPost_title() + "\t" + row.getMem_id()
+                    + "\t" + row.getCreate_Time() + "\t\t" + row.getView_count());
         }
+        System.out.println();
     }
 
     //insert 값을 입력받는 메소드
@@ -108,15 +144,95 @@ public class PostMain {
         postdao.insertPost(post);
     }
 
-    private static void updateProcess() {
+    private static void updateProcess(Post post) {
+        System.out.println("<게시글 수정 페이지>");
+        System.out.println(post);
+        System.out.println();
+
+        System.out.print("제목 수정: ");
+        String edit_title = scanner.nextLine();
+        post.setPost_title(edit_title);
+
+        System.out.println("내용 수정: ");
+        String edit_content = scanner.nextLine();
+        post.setContent(edit_content);
+
+        postdao.updatePost(post);
     }
 
     private static void deleteProcess() {
+        System.out.print("삭제할 게시글 번호 > ");
+        int selectPost = scanner.nextInt();
+        scanner.nextLine();
+
+        postdao.deletePost(selectPost);
+        System.out.println();
+
+        System.out.println("게시글이 삭제되었습니다.\n");
     }
 
     private static void searchProcess() {
+        List<Post> searchPost = new ArrayList<>();
+
+        LocalDate now = LocalDate.now();
+        System.out.println(now);
+        String dateQuery = "create_Time > date_add(now(), interval -1";
+        String keyword = "";
+
+        System.out.println("기간 선택");
+        System.out.println("1.전체 | 2.지난 1년 | 3.지난 1달");
+        int selectNum = scanner.nextInt();
+        scanner.nextLine();
+
+        switch (selectNum){
+            case 1:
+                dateQuery = ""; //기간을 전체로 하면 dateQuery가 필요하지 않기 때문에 초기화
+                break;
+            case 2:
+                dateQuery += " year";   //기간 1년으로 설정
+                break;
+            case 3:
+                dateQuery += " month";  //기간 1달로 설정
+                break;
+            default:
+                dateQuery = ""; //선택 없으면 기본으로 전체 기간 선택
+                break;
+        }
+
+        System.out.println("검색 범위를 선택하세요");
+        System.out.println("1.제목 | 2.내용 | 3.제목+내용");
+        selectNum = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.print("검색어를 입력하세요 >");
+        keyword = scanner.nextLine();
+
+        switch (selectNum){
+            case 2:
+                searchPost = postdao.serachPost(2, dateQuery, keyword);
+                break;
+            case 3:
+                searchPost = postdao.serachPost(3, dateQuery, keyword);
+                break;
+            default:
+                searchPost = postdao.serachPost(1, dateQuery, keyword);
+                break;
+        }
+
+        String board;
+        System.out.println("게시글 아이디 | 게시판 | 제목 | 작성자 | 작성일 | 조회수");
+        System.out.println("-------------------------------------");
+        for (Post post : searchPost) {
+            Post row = post;
+
+            if (row.getBoard_id() == 1) {
+                board = "공지";
+            } else {
+                board = "일반";
+            }
+            System.out.println(row.getPost_id() + "\t" + board + "\t" + row.getPost_title() + "\t" + row.getMem_id()
+                    + "\t" + row.getCreate_Time() + "\t\t" + row.getView_count());
+        }
+        System.out.println();
     }
-
-
-
 }
