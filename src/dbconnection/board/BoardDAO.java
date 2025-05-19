@@ -36,7 +36,7 @@ public class BoardDAO {
             System.out.println("게시판 등록 실패");
             e.printStackTrace();
         } finally {
-            MyDBConnection.close(null, pstmt, con);
+            MyDBConnection.close(rs, pstmt, con);
         }
     }//end of insert
 

@@ -10,7 +10,10 @@ import java.util.Scanner;
 public class BoardMain {
     public static Scanner scanner = new Scanner(System.in);
     public static BoardDAO boardDAO = new BoardDAO();
-
+    public static LocalDateTime now = LocalDateTime.now();
+    //SQL문 사용가능한 DATETIME 형태로 포맷
+    public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    public static String formattedTime = now.format(formatter);
     public static void main(String[] args) {
 
         while (true) {
@@ -53,7 +56,7 @@ public class BoardMain {
         System.out.print("게시판 제목 입력 : ");
         String title = scanner.nextLine();
 
-        String createDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        String createDate = formattedTime;
 
         BoardDTO dto = new BoardDTO();
         dto.setMem_id(memId);
