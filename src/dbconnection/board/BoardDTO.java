@@ -13,6 +13,12 @@ public class BoardDTO {
         this.board_createdate = board_createdate;
     }
 
+    /*public BoardDTO(String mem_id, String board_title, String board_createdate) {
+        this.mem_id = mem_id;
+        this.board_title = board_title;
+        this.board_createdate = board_createdate;
+    }*/
+
     public BoardDTO() {}
 
     public int getBoard_id() {
