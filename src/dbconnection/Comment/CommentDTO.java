@@ -14,6 +14,11 @@ public class CommentDTO {
         this.createTime = createTime;
     }
 
+    public CommentDTO(String mem_id, int comment_id) {
+        this.mem_id = mem_id;
+        this.comment_id = comment_id;
+    }
+
     public CommentDTO() {}
 
 
@@ -61,6 +66,8 @@ public class CommentDTO {
     @Override
     public String toString() {
         return "댓글 번호: " + comment_id + " 작성자: " + mem_id + " 작성일자: " + createTime
-                + "\n내용: " + content + "작성 게시글: " + post_id;
+                + "\n내용: " + content + "\n게시글 번호: " + post_id;
     }
+
+
 }
