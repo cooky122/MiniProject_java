@@ -23,8 +23,6 @@ public class CommentMain {
     public static String formattedTime = now.format(formatter);
     //Scanner 객체 선언
     public static Scanner sc = new Scanner(System.in);
-    private static PostMain postMain;
-    private static BoardMain boardMain;
     private static PostDAO postDAO = new PostDAO();
     private static BoardDAO boardDAO = new BoardDAO();
     private static CommentDAO commentDAO = new CommentDAO();
@@ -103,7 +101,7 @@ public class CommentMain {
 
         System.out.println("댓글 입력 페이지");
         System.out.println("원하는 게시글을 선택해 주세요");
-        postMain.printPostList();
+        PostMain.printPostList();
         System.out.print("게시글 번호 입력 >>");
         int post_id = Integer.parseInt(sc.nextLine());
 //        추후 로그인 상태라면 String mem_id = 입력된 ID
