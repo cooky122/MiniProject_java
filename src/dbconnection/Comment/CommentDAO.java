@@ -101,7 +101,7 @@ public class CommentDAO {
     return comments;
   }//end of findAllCommentByMemID
 
-  public List<CommentDTO> findCommentByPostId(int comment_id) {
+  public List<CommentDTO> findCommentByCommentId(int comment_id) {
     List<CommentDTO> comments = new ArrayList<>();
 
     String sql = "select * from Comment where comment_id=?";

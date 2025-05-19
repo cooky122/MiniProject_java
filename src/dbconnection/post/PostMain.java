@@ -79,7 +79,7 @@ public class PostMain {
     }
 
     //전체 게시물 리스트로 출력
-    private static void printPostList() {
+    public static void printPostList() {
         List<Post> postList = new ArrayList<Post>();
 
         postList = postdao.findPostAll();
