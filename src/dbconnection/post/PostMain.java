@@ -1,5 +1,7 @@
 package dbconnection.post;
 
+import dbconnection.Comment.CommentMain;
+
 import java.util.List;
 import java.util.Scanner;
 
@@ -45,7 +47,7 @@ public class PostMain {
         }
     }
 
-    private static void readProcess() {
+    public static void readProcess() {
         System.out.print("조회할 게시글 번호 > ");
         int selectPost = scanner.nextInt();
         scanner.nextLine();
@@ -73,10 +75,10 @@ public class PostMain {
             if(selectACT == 3){ //다음 선택시 아무 행동도 하지 않고 넘어감
                 break;
             }else if(selectACT == 1){
-                postdao.updateLike(selectPost); //좋아요 선택시 좋아요 업데이트 후 반복문 탈출
+                postdao.updateLike(selectPost); //좋아요 선택시 좋아요 업데이트 후 반복문 처음으로 이동(게시글 수정을 할수도 있기 때문에)
                 continue;
             }else if(selectACT == 2){
-                updateProcess(post); //게시글 수정 선택시 update 메소드 호출, 수정할 제목, 내용 입력받는 메소드
+                updateProcess(post); //게시글 수정 선택시 update 메소드 호출, 수정할 제목, 내용 입력받는 메소드, 수행 후 반복문 처음으로 이동(게시글 좋아요 누를수도 있기 때문에)
                 continue;
             }else{
                 System.out.println("잘못된 입력입니다.");
@@ -85,7 +87,8 @@ public class PostMain {
         }
 
         //여기에 댓글 CRUD 기능 삽입
-
+        //매개변수로 현재 읽은 게시물에 대한 post 객체 넘겨주면 될듯
+        CommentMain.Start();
     }
 
     //전체 게시물 리스트로 출력
@@ -113,7 +116,7 @@ public class PostMain {
     }
 
     //insert 값을 입력받는 메소드
-    private static void insertProcess() {
+    public static void insertProcess() {
         Post post = new Post();
 
         //게시판 선택
@@ -155,7 +158,7 @@ public class PostMain {
     }
 
     //수정할 제목, 내용을 입력받는 메소드
-    private static void updateProcess(Post post) {
+    public static void updateProcess(Post post) {
         //수정하려는 사람이 작성자 본인인지 확인, 맞으면 수정 진행하고 아니면 updateProcess 메소드 종료
 //        if(!<여기에 작성자 mem_id 가져오기>.equals(post.getMem_id())){
 //            System.out.println("게시물 작성자만 수정할 수 있습니다.");
@@ -177,7 +180,7 @@ public class PostMain {
         postdao.updatePost(post);   //updatePost 로 post 객체 전달
     }
 
-    private static void deleteProcess() {
+    public static void deleteProcess() {
         System.out.print("삭제할 게시글 번호 > ");  //삭제할 게시글 post_id 입력
         int selectPost = scanner.nextInt();
         scanner.nextLine();
@@ -188,7 +191,7 @@ public class PostMain {
         System.out.println("게시글이 삭제되었습니다.\n");
     }
 
-    private static void searchProcess() {
+    public static void searchProcess() {
         List<Post> searchPost;
 
         //sql 문을 실행하는 날짜에서 검색범위를 1년 또는 1개월로 제한하는 쿼리문
