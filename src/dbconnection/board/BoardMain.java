@@ -111,7 +111,7 @@ public class BoardMain {
     }
 
     // 게시판 정보 출력
-    private static void printBoard(BoardDTO board) {
+    public static void printBoard(BoardDTO board) {
         System.out.println("--------------------------");
         System.out.println("게시판 ID   : " + board.getBoard_id());
         System.out.println("작성자 ID   : " + board.getMem_id());

@@ -40,7 +40,7 @@ public class CommentDAO {
   public List<CommentDTO> findAllComment() {
     List<CommentDTO> comments = new ArrayList<>();
 
-    String sql = "select * from Comment order by comment_id desc";
+    String sql = "select * from Comment order by comment_id";
 
     try {
       con = MyDBConnection.getConnection();
@@ -101,7 +101,7 @@ public class CommentDAO {
     return comments;
   }//end of findAllCommentByMemID
 
-  public List<CommentDTO> findCommentByPostId(int comment_id) {
+  public List<CommentDTO> findCommentByCommentId(int comment_id) {
     List<CommentDTO> comments = new ArrayList<>();
 
     String sql = "select * from Comment where comment_id=?";
@@ -183,7 +183,7 @@ public void deleteComment(int comment_id) {
     } finally {
       MyDBConnection.close(rs, pstmt, con);
     }
-}
+}//end of deleteComment
 
 //</editor-fold>
 

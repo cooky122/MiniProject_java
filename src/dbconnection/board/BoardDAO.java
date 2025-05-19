@@ -55,7 +55,7 @@ public class BoardDAO {
                 board.setBoard_id(rs.getInt("board_id"));
                 board.setMem_id(rs.getString("mem_id"));
                 board.setBoard_title(rs.getString("board_title"));
-                board.setBoard_createdate(rs.getString("board_createdate"));
+                board.setBoard_createdate(rs.getTimestamp("board_createdate").toString());
 
                 boards.add(board);
             }
@@ -84,7 +84,7 @@ public class BoardDAO {
                 board.setBoard_id(rs.getInt("board_id"));
                 board.setMem_id(rs.getString("mem_id"));
                 board.setBoard_title(rs.getString("board_title"));
-                board.setBoard_createdate(rs.getString("board_createdate"));
+                board.setBoard_createdate(rs.getTimestamp("board_createdate").toString());
             }
 
         } catch (SQLException e) {

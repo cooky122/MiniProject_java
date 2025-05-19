@@ -1,11 +1,11 @@
 package dbconnection.Comment;
 
-import dbconnection.MyDBConnection;
+import dbconnection.board.BoardDAO;
+import dbconnection.board.BoardDTO;
+import dbconnection.board.BoardMain;
+import dbconnection.post.PostDAO;
+import dbconnection.post.PostMain;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -23,10 +23,13 @@ public class CommentMain {
     public static String formattedTime = now.format(formatter);
     //Scanner 객체 선언
     public static Scanner sc = new Scanner(System.in);
-    private static CommentDTO commentDTO;
+    private static PostMain postMain;
+    private static BoardMain boardMain;
+    private static PostDAO postDAO = new PostDAO();
+    private static BoardDAO boardDAO = new BoardDAO();
     private static CommentDAO commentDAO = new CommentDAO();
 
-//<editor-fold desc="시작 선택지"
+//<editor-fold desc="시작 선택지">
     public static void Start(){
         while(true) {
             System.out.println("댓글 생성 메인 페이지");
@@ -67,7 +70,7 @@ public class CommentMain {
             String result = sc.nextLine();
             if(result.equals("1")) {
                 System.out.println("수정하실 내용을 입력해 주세요");
-                System.out.println("기존 내용: " + printContent(commentDAO.findCommentByPostId(comment_id)));
+                System.out.println("기존 내용: " + printContent(commentDAO.findCommentByCommentId(comment_id)));
                 System.out.print(">>");
                 String content = sc.nextLine();
                 commentDAO.updateComment(content,comment_id);
@@ -89,10 +92,12 @@ public class CommentMain {
 
 //<editor-fold desc="삽입">
     private static void InsetComment() {
+        List<BoardDTO> boards = boardDAO.findAllBoards();
+
 
         System.out.println("댓글 입력 페이지");
         System.out.println("원하는 게시글을 선택해 주세요");
-//        보드 목록을 불러오는 메서드()
+        postMain.printPostList();
         System.out.print("게시글 번호 입력 >>");
         int post_id = Integer.parseInt(sc.nextLine());
 //        추후 로그인 상태라면 String mem_id = 입력된 ID
@@ -102,7 +107,7 @@ public class CommentMain {
         System.out.println("\n작성하고자 하는 내용을 입력해주세요");
         System.out.print(">>");
         String content = sc.nextLine();
-        String createTime = now.format(formatter);
+        String createTime = formattedTime;
 
         CommentDTO dto = new CommentDTO(post_id,mem_id,content,createTime);
 
@@ -123,6 +128,7 @@ public class CommentMain {
                 System.out.println("찾기를 원하는 게시글 입력");
                 System.out.print(">> ");
                 int post_id = Integer.parseInt(sc.nextLine());
+                System.out.println(postDAO.findPost(post_id));
                 printAll(commentDAO.findAllCommentByPostId(post_id));
             break;
             case 3:
@@ -136,18 +142,21 @@ public class CommentMain {
 //</editor-fold>
     
 //<editor-fold desc="내용 출력">
-    private static void printAll(List<CommentDTO> list) {
-        System.out.println("\n===== 댓글 목록 =====");
+    //commentDAO 에서 출력하고자 하는 메서드 끌고오면 출력 가능합니다.
+    public static void printAll(List<CommentDTO> list) {
+        System.out.println("========== 댓글 목록 ==========");
         for (CommentDTO comment : list ) {
             System.out.println(comment); // toString 자동 호출
-            System.out.println("--------------------------------");
         }
+        System.out.println("--------------------------------");
     }//end of printAll
-    private static String printContent(List<CommentDTO> list) {
+    //댓글의 내용만 출력하고자 할때 CommentDAO에서 원하는 값 매개변수로 추가 후 호출하시면 됩니다.
+    public static String printContent(List<CommentDTO> list) {
         CommentDTO commentDTO = list.getFirst();
 
         return  commentDTO.content;
     }//end of printContent
+
 //</editor-fold>
 
 }
