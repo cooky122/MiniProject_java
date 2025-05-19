@@ -16,6 +16,7 @@ public class PostDAO {
     PreparedStatement pstmt  = null;
     ResultSet rs = null;
 
+    //<editor-fold desc="게시물 insert 메소드">
     public void insertPost(Post post){
         String sql = "insert into post (board_id, mem_id, post_title, content, post_type)" + "values (?, ?, ?, ?, ?)";
 
@@ -37,7 +38,9 @@ public class PostDAO {
             MyDBConnection.close(rs, pstmt, con);
         }
     }
+    //</editor-fold>
 
+    //<editor-fold desc="게시물 1개 select 메소드">
     public Post findPost(int post_id){
         Post post = new Post();
 
@@ -66,7 +69,9 @@ public class PostDAO {
 
         return post;
     }
+    //</editor-fold>
 
+    //<editor-fold desc="게시물 전체 select 메소드">
     public List<Post> findPostAll() {
         List<Post> postList = new ArrayList<>();
 
@@ -97,7 +102,9 @@ public class PostDAO {
 
         return postList;
     }
+    //</editor-fold>
 
+    //<editor-fold desc="게시물 update 메소드">
     public void updatePost(Post post) {
         String sql = "update post set post_title=?, content=? where post_id=?";
 
@@ -116,7 +123,9 @@ public class PostDAO {
             MyDBConnection.close(rs, pstmt, con);
         }
     }
+    //</editor-fold>
 
+    //<editor-fold desc="게시물 delete 메소드">
     public void deletePost(int post_id) {
         String sql = "delete from post where post_id=?";
 
@@ -133,7 +142,9 @@ public class PostDAO {
             MyDBConnection.close(rs, pstmt, con);
         }
     }
+    //</editor-fold>
 
+    //<editor-fold desc="게시물 좋아요 업데이트 메소드">
     public void updateLike(int post_id) {
         String sql = "update post set like_count = like_count+1 where post_id=?";
 
@@ -149,7 +160,9 @@ public class PostDAO {
             MyDBConnection.close(rs, pstmt, con);
         }
     }
+    //</editor-fold>
 
+    //<editor-fold desc="게시물 조회수 업데이트 메소드">
     public void updateView(int post_id) {
         String sql = "update post set view_count = view_count+1 where post_id=?";
 
@@ -165,7 +178,9 @@ public class PostDAO {
             MyDBConnection.close(rs, pstmt, con);
         }
     }
+    //</editor-fold>
 
+    //<editor-fold desc="특정 게시물 select 메소드">
     public List<Post> searchPost(int i, String dateQuery, String keyword) {
         List<Post> searchPost = new ArrayList<>();
 
@@ -202,4 +217,5 @@ public class PostDAO {
 
         return searchPost;
     }
+    //</editor-fold>
 }

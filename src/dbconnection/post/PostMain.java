@@ -5,6 +5,9 @@ import dbconnection.Comment.CommentMain;
 import java.util.List;
 import java.util.Scanner;
 
+//<editor-fold desc="원하는 이름">
+//</editor-fold>
+
 /*
 게시물 작성 메인페이지
  */
@@ -12,6 +15,7 @@ public class PostMain {
     public static Scanner scanner = new Scanner(System.in);
     public static PostDAO postdao = new PostDAO();
 
+    //<editor-fold desc="게시물 CRUD 시작 선택지">
     public static void start() {
         System.out.println("<게시글 작성 페이지>");
 
@@ -46,7 +50,9 @@ public class PostMain {
             }
         }
     }
+    //</editor-fold>
 
+    //<editor-fold desc="게시물 조회">
     public static void readProcess() {
         System.out.print("조회할 게시글 번호 > ");
         int selectPost = scanner.nextInt();
@@ -90,7 +96,9 @@ public class PostMain {
         //매개변수로 현재 읽은 게시물에 대한 post 객체 넘겨주면 될듯
         CommentMain.Start();
     }
+    //</editor-fold>
 
+    //<editor-fold desc="게시물 리스트 출력">
     //전체 게시물 리스트로 출력
     public static void printPostList() {
         //List<Post> postList = new ArrayList<Post>();    //게시글 객체들을 저장할 리스트
@@ -114,7 +122,9 @@ public class PostMain {
         }
         System.out.println();
     }
+    //</editor-fold>
 
+    //<editor-fold desc="게시물 작성">
     //insert 값을 입력받는 메소드
     public static void insertProcess() {
         Post post = new Post();
@@ -156,7 +166,9 @@ public class PostMain {
         //PostDAO 의 insertPost 호출, db에 insert 수행
         postdao.insertPost(post);
     }
+    //</editor-fold>
 
+    //<editor-fold desc="게시물 수정사항 작성">
     //수정할 제목, 내용을 입력받는 메소드
     public static void updateProcess(Post post) {
         //수정하려는 사람이 작성자 본인인지 확인, 맞으면 수정 진행하고 아니면 updateProcess 메소드 종료
@@ -179,7 +191,9 @@ public class PostMain {
 
         postdao.updatePost(post);   //updatePost 로 post 객체 전달
     }
+    //</editor-fold>
 
+    //<editor-fold desc="게시물 삭제">
     public static void deleteProcess() {
         System.out.print("삭제할 게시글 번호 > ");  //삭제할 게시글 post_id 입력
         int selectPost = scanner.nextInt();
@@ -190,7 +204,9 @@ public class PostMain {
 
         System.out.println("게시글이 삭제되었습니다.\n");
     }
+    //</editor-fold>
 
+    //<editor-fold desc="게시물 검색">
     public static void searchProcess() {
         List<Post> searchPost;
 
@@ -245,4 +261,5 @@ public class PostMain {
         }
         System.out.println();
     }
+    //</editor-fold>
 }
