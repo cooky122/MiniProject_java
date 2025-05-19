@@ -36,6 +36,7 @@ public class BoardDAO {
             System.out.println("게시판 등록 실패");
             e.printStackTrace();
         } finally {
+            //형관: null 말고 rs로 해도 상관없지 않나요?
             MyDBConnection.close(null, pstmt, con);
         }
     }//end of insert
@@ -55,7 +56,7 @@ public class BoardDAO {
                 board.setBoard_id(rs.getInt("board_id"));
                 board.setMem_id(rs.getString("mem_id"));
                 board.setBoard_title(rs.getString("board_title"));
-                board.setBoard_createdate(rs.getTimestamp("board_createdate").toString());
+                board.setBoard_createdate(rs.getString("board_createdate"));
 
                 boards.add(board);
             }

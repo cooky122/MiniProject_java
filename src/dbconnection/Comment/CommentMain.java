@@ -1,5 +1,8 @@
 package dbconnection.Comment;
 
+import dbconnection.board.BoardDAO;
+import dbconnection.board.BoardMain;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -17,7 +20,8 @@ public class CommentMain {
     public static String formattedTime = now.format(formatter);
     //Scanner 객체 선언
     public static Scanner sc = new Scanner(System.in);
-    private static CommentDTO commentDTO;
+    private static BoardMain board = new BoardMain();
+    private static BoardDAO boardDAO = new BoardDAO();
     private static CommentDAO commentDAO = new CommentDAO();
 
 //<editor-fold desc="시작 선택지">
@@ -86,7 +90,7 @@ public class CommentMain {
 
         System.out.println("댓글 입력 페이지");
         System.out.println("원하는 게시글을 선택해 주세요");
-//        보드 목록을 불러오는 메서드()
+//        board의 게시글목록 보여주기
         System.out.print("게시글 번호 입력 >>");
         int post_id = Integer.parseInt(sc.nextLine());
 //        추후 로그인 상태라면 String mem_id = 입력된 ID
@@ -96,7 +100,7 @@ public class CommentMain {
         System.out.println("\n작성하고자 하는 내용을 입력해주세요");
         System.out.print(">>");
         String content = sc.nextLine();
-        String createTime = now.format(formatter);
+        String createTime = formattedTime;
 
         CommentDTO dto = new CommentDTO(post_id,mem_id,content,createTime);
 
@@ -130,18 +134,19 @@ public class CommentMain {
 //</editor-fold>
     
 //<editor-fold desc="내용 출력">
-    private static void printAll(List<CommentDTO> list) {
+    public static void printAll(List<CommentDTO> list) {
         System.out.println("\n===== 댓글 목록 =====");
         for (CommentDTO comment : list ) {
             System.out.println(comment); // toString 자동 호출
-            System.out.println("--------------------------------");
         }
+        System.out.println("--------------------------------");
     }//end of printAll
-    private static String printContent(List<CommentDTO> list) {
+    public static String printContent(List<CommentDTO> list) {
         CommentDTO commentDTO = list.getFirst();
 
         return  commentDTO.content;
     }//end of printContent
+
 //</editor-fold>
 
 }

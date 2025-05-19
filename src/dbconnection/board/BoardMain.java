@@ -21,4 +21,13 @@ public class BoardMain {
 
         }
     }
+
+    public static void printBoard(BoardDTO board) {
+        System.out.println("--------------------------");
+        System.out.println("게시판 ID   : " + board.getBoard_id());
+        System.out.println("작성자 ID   : " + board.getMem_id());
+        System.out.println("게시판 제목 : " + board.getBoard_title());
+        System.out.println("생성 일자   : " + board.getBoard_createdate());
+        System.out.println("--------------------------");
+    }
 }
