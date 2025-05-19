@@ -106,7 +106,7 @@ public class PostDAO {
 
     //<editor-fold desc="게시물 update 메소드">
     public void updatePost(Post post) {
-        String sql = "update post set post_title=?, content=? where post_id=?";
+        String sql = "update post set post_title=?, content=?, update_Time=? where post_id=?";
 
         con = MyDBConnection.getConnection();
 
@@ -114,7 +114,8 @@ public class PostDAO {
             pstmt = con.prepareStatement(sql);
             pstmt.setString(1, post.getPost_title());
             pstmt.setString(2, post.getContent());
-            pstmt.setInt(3, post.getPost_id());
+            pstmt.setString(3, post.getUpdate_time());
+            pstmt.setInt(4, post.getPost_id());
 
             pstmt.executeUpdate();
         }catch (SQLException e) {
