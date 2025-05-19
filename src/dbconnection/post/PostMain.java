@@ -2,6 +2,8 @@ package dbconnection.post;
 
 import dbconnection.Comment.CommentMain;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 
@@ -82,13 +84,10 @@ public class PostMain {
                 break;
             }else if(selectACT == 1){
                 postdao.updateLike(selectPost); //좋아요 선택시 좋아요 업데이트 후 반복문 처음으로 이동(게시글 수정을 할수도 있기 때문에)
-                continue;
             }else if(selectACT == 2){
                 updateProcess(post); //게시글 수정 선택시 update 메소드 호출, 수정할 제목, 내용 입력받는 메소드, 수행 후 반복문 처음으로 이동(게시글 좋아요 누를수도 있기 때문에)
-                continue;
             }else{
                 System.out.println("잘못된 입력입니다.");
-                continue;
             }
         }
 
@@ -111,11 +110,13 @@ public class PostMain {
         for (Post post : postList) {
             //board_id에 따라 게시판 구분하기
             //1이면 공지게시판에 속하고 2이면 자유게시판
+            //boardDAO 에서 메소드 받아서 처리하는거로 수정하기
             if (post.getBoard_id() == 1) {
                 board = "공지";
             } else if(post.getBoard_id() == 2){
                 board = "자유";
             }
+
             //게시글 출력
             System.out.println(post.getPost_id() + "\t" + board + "\t" + post.getPost_title() + "\t" + post.getMem_id()
                     + "\t" + post.getCreate_Time() + "\t\t" + post.getView_count());
@@ -188,6 +189,11 @@ public class PostMain {
         System.out.println("내용 수정: ");  //수정한 내용 입력
         String edit_content = scanner.nextLine();
         post.setContent(edit_content);
+
+        //자바에서 현재 날짜 시간 받아서 post.setUpdate_Time 으로 업데이트
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        post.setUpdate_time(now.format(formatter));
 
         postdao.updatePost(post);   //updatePost 로 post 객체 전달
     }
