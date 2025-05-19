@@ -70,7 +70,7 @@ public class CommentMain {
             String result = sc.nextLine();
             if(result.equals("1")) {
                 System.out.println("수정하실 내용을 입력해 주세요");
-                System.out.println("기존 내용: " + printContent(commentDAO.findCommentByPostId(comment_id)));
+                System.out.println("기존 내용: " + printContent(commentDAO.findCommentByCommentId(comment_id)));
                 System.out.print(">>");
                 String content = sc.nextLine();
                 commentDAO.updateComment(content,comment_id);
@@ -150,7 +150,7 @@ public class CommentMain {
         }
         System.out.println("--------------------------------");
     }//end of printAll
-    //댓글의 내용만 출력하고자 할때 호출하시면 됩니다.
+    //댓글의 내용만 출력하고자 할때 CommentDAO에서 원하는 값 매개변수로 추가 후 호출하시면 됩니다.
     public static String printContent(List<CommentDTO> list) {
         CommentDTO commentDTO = list.getFirst();
 

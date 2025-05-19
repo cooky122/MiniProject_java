@@ -89,7 +89,7 @@ public class PostMain {
     }
 
     //전체 게시물 리스트로 출력
-    private static void printPostList() {
+    public static void printPostList() {
         //List<Post> postList = new ArrayList<Post>();    //게시글 객체들을 저장할 리스트
 
         List<Post> postList = postdao.findPostAll();   //PostDAO 의 findPostAll 메소드로 post 테이블에서 게시글 객체 모두 가져오기
