@@ -68,7 +68,7 @@ public class PostDAO {
     }
 
     public List<Post> findPostAll() {
-        List<Post> postList = new ArrayList<Post>();
+        List<Post> postList = new ArrayList<>();
 
         String sql = "select * from post";
         con = MyDBConnection.getConnection();
@@ -175,6 +175,7 @@ public class PostDAO {
             case 3 -> "select * from post where post_title like '%"+ keyword +"%' or content like '%"+ keyword +"%'";
             default -> throw new IllegalStateException("입력 오류");
         };
+        sql += (" and " + dateQuery);
 
         con = MyDBConnection.getConnection();
 

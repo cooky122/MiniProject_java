@@ -1,10 +1,11 @@
 package dbconnection.post;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/*
+게시물 작성 메인페이지
+ */
 public class PostMain {
     public static Scanner scanner = new Scanner(System.in);
     public static PostDAO postdao = new PostDAO();
@@ -12,31 +13,31 @@ public class PostMain {
     public static void start() {
         System.out.println("<게시글 작성 페이지>");
 
-        //while 문으로 번호 입력받아서 crud 실행 코드 넣기
+        //while 문으로 번호 입력받아서 다음 행동 수행
         while(true){
             //테이블 전체를 보여주는 메소드
-            //소속 게시판/제목/작성자/작성일/조회수 순서로 출력
+            //소속 게시판 | 제목 | 작성자 | 작성일 | 조회수 순서로 출력
             printPostList();
 
             System.out.println("1.게시글 조회 / 2.게시글 작성 / 3.게시글 삭제 / 4.게시글 검색 / 5. 종료");
-
             int select = scanner.nextInt();
             scanner.nextLine();
-            if(select == 5) //입력 종료
+
+            if(select == 5) //게시글에 대한 작업 종료
                 break;
 
             switch(select) {
                 case 1:
-                    readProcess();    //게시글 조회 메소드
+                    readProcess();    //조회할 게시글 id를 입력받는 메소드
                     break;
                 case 2:
-                    insertProcess();    //게시글 작성 메소드
+                    insertProcess();    //작성할 게시글 제목, 내용을 입력받는 메소드
                     break;
                 case 3:
-                    deleteProcess();    //delete 값을 입력받는 메소드
+                    deleteProcess();    //삭제할 게시글 id를 입력받는 메소드
                     break;
                 case 4:
-                    searchProcess();    //검색어를 입력받는 메소드
+                    searchProcess();    //게시글 검색어를 입력받는 메소드
                     break;
                default:
                     break;
@@ -49,24 +50,33 @@ public class PostMain {
         int selectPost = scanner.nextInt();
         scanner.nextLine();
 
+        //PostDAO 의 findPost 메소드에 post_id를 매개변수로 넘겨 해당 게시글 정보를 객체로 받아오기
         Post post = postdao.findPost(selectPost);
-        System.out.println(post);
+
+        //board_id가 1이면 공지게시판, 2이면 자유게시판
+        if(post.getBoard_id() == 1){
+            System.out.println("<공지게시판>");
+        }else if(post.getBoard_id() == 2){
+            System.out.println("<자유게시판>");
+        }
+        System.out.println(post);   //DB 에서 가져온 post 객체 출력
         System.out.println();
-        postdao.updateView(selectPost); //view_count 업데이트
+
+        postdao.updateView(selectPost); //해당 게시글의 view_count 업데이트
 
         while(true) {
-            //좋아요 누를지 말지 선택
+            //좋아요 할지 말지 선택
             System.out.println(" 1.좋아요 / 2.게시글 수정 / 3.다음");
             int selectACT = scanner.nextInt();
             scanner.nextLine();
 
-            if(selectACT == 3){
+            if(selectACT == 3){ //다음 선택시 아무 행동도 하지 않고 넘어감
                 break;
             }else if(selectACT == 1){
-                postdao.updateLike(selectPost); //좋아요 선택시 좋아요 업데이트
-                break;
+                postdao.updateLike(selectPost); //좋아요 선택시 좋아요 업데이트 후 반복문 탈출
+                continue;
             }else if(selectACT == 2){
-                updateProcess(post); //게시글 수정 선택시 update 메소드 호출
+                updateProcess(post); //게시글 수정 선택시 update 메소드 호출, 수정할 제목, 내용 입력받는 메소드
                 continue;
             }else{
                 System.out.println("잘못된 입력입니다.");
@@ -80,24 +90,24 @@ public class PostMain {
 
     //전체 게시물 리스트로 출력
     private static void printPostList() {
-        List<Post> postList = new ArrayList<Post>();
+        //List<Post> postList = new ArrayList<Post>();    //게시글 객체들을 저장할 리스트
 
-        postList = postdao.findPostAll();
-        Post row = new Post();
+        List<Post> postList = postdao.findPostAll();   //PostDAO 의 findPostAll 메소드로 post 테이블에서 게시글 객체 모두 가져오기
         String board="";
 
-        System.out.println("게시글 아이디 | 게시판 | 제목 | 작성자 | 작성일 | 조회수");
+        System.out.println("게시글 아이디 | 게시판 | 제목 | 작성자 | 작성일 | 조회수"); //메뉴
         System.out.println("-------------------------------------");
         for (Post post : postList) {
-            row = post;
-
-            if (row.getBoard_id() == 1) {
+            //board_id에 따라 게시판 구분하기
+            //1이면 공지게시판에 속하고 2이면 자유게시판
+            if (post.getBoard_id() == 1) {
                 board = "공지";
-            } else {
-                board = "일반";
+            } else if(post.getBoard_id() == 2){
+                board = "자유";
             }
-            System.out.println(row.getPost_id() + "\t" + board + "\t" + row.getPost_title() + "\t" + row.getMem_id()
-                    + "\t" + row.getCreate_Time() + "\t\t" + row.getView_count());
+            //게시글 출력
+            System.out.println(post.getPost_id() + "\t" + board + "\t" + post.getPost_title() + "\t" + post.getMem_id()
+                    + "\t" + post.getCreate_Time() + "\t\t" + post.getView_count());
         }
         System.out.println();
     }
@@ -131,11 +141,7 @@ public class PostMain {
         String a = scanner.nextLine();
 
         boolean post_type;
-        if(a.equals("y")){
-            post_type = true;
-        }else{
-            post_type = false;
-        }
+        post_type = a.equals("y");
 
         //post dto 객체에 값 넣기
         post.setBoard_id(board_id);
@@ -148,40 +154,45 @@ public class PostMain {
         postdao.insertPost(post);
     }
 
+    //수정할 제목, 내용을 입력받는 메소드
     private static void updateProcess(Post post) {
+        //수정하려는 사람이 작성자 본인인지 확인, 맞으면 수정 진행하고 아니면 updateProcess 메소드 종료
+//        if(!<여기에 작성자 mem_id 가져오기>.equals(post.getMem_id())){
+//            System.out.println("게시물 작성자만 수정할 수 있습니다.");
+//            return;
+//        }
+
         System.out.println("<게시글 수정 페이지>");
-        System.out.println(post);
+        System.out.println(post);   //기존 제목, 내용 가져와 출력
         System.out.println();
 
-        System.out.print("제목 수정: ");
+        System.out.print("제목 수정: ");    //수정한 제목 입력
         String edit_title = scanner.nextLine();
         post.setPost_title(edit_title);
 
-        System.out.println("내용 수정: ");
+        System.out.println("내용 수정: ");  //수정한 내용 입력
         String edit_content = scanner.nextLine();
         post.setContent(edit_content);
 
-        postdao.updatePost(post);
+        postdao.updatePost(post);   //updatePost 로 post 객체 전달
     }
 
     private static void deleteProcess() {
-        System.out.print("삭제할 게시글 번호 > ");
+        System.out.print("삭제할 게시글 번호 > ");  //삭제할 게시글 post_id 입력
         int selectPost = scanner.nextInt();
         scanner.nextLine();
 
-        postdao.deletePost(selectPost);
+        postdao.deletePost(selectPost); //deletePost 에 입력한 post_id 전달
         System.out.println();
 
         System.out.println("게시글이 삭제되었습니다.\n");
     }
 
     private static void searchProcess() {
-        List<Post> searchPost = new ArrayList<>();
+        List<Post> searchPost;
 
-        LocalDate now = LocalDate.now();
-        System.out.println(now);
+        //sql 문을 실행하는 날짜에서 검색범위를 1년 또는 1개월로 제한하는 쿼리문
         String dateQuery = "create_Time > date_add(now(), interval -1";
-        String keyword = "";
 
         System.out.println("기간 선택");
         System.out.println("1.전체 | 2.지난 1년 | 3.지난 1달");
@@ -190,7 +201,7 @@ public class PostMain {
 
         switch (selectNum){
             case 1:
-                dateQuery = ""; //기간을 전체로 하면 dateQuery가 필요하지 않기 때문에 초기화
+                dateQuery = ""; //기간을 전체로 하면 dateQuery 가 필요하지 않기 때문에 초기화
                 break;
             case 2:
                 dateQuery += " year";   //기간 1년으로 설정
@@ -209,33 +220,25 @@ public class PostMain {
         scanner.nextLine();
 
         System.out.print("검색어를 입력하세요 >");
-        keyword = scanner.nextLine();
+        String keyword = scanner.nextLine();
 
-        switch (selectNum){
-            case 2:
-                searchPost = postdao.searchPost(2, dateQuery, keyword);
-                break;
-            case 3:
-                searchPost = postdao.searchPost(3, dateQuery, keyword);
-                break;
-            default:
-                searchPost = postdao.searchPost(1, dateQuery, keyword);
-                break;
-        }
+        searchPost = switch (selectNum) {
+            case 2 -> postdao.searchPost(2, dateQuery, keyword);
+            case 3 -> postdao.searchPost(3, dateQuery, keyword);
+            default -> postdao.searchPost(1, dateQuery, keyword);
+        };
 
         String board;
         System.out.println("게시글 아이디 | 게시판 | 제목 | 작성자 | 작성일 | 조회수");
         System.out.println("-------------------------------------");
         for (Post post : searchPost) {
-            Post row = post;
-
-            if (row.getBoard_id() == 1) {
+            if (post.getBoard_id() == 1) {
                 board = "공지";
             } else {
                 board = "일반";
             }
-            System.out.println(row.getPost_id() + "\t" + board + "\t" + row.getPost_title() + "\t" + row.getMem_id()
-                    + "\t" + row.getCreate_Time() + "\t\t" + row.getView_count());
+            System.out.println(post.getPost_id() + "\t" + board + "\t" + post.getPost_title() + "\t" + post.getMem_id()
+                    + "\t" + post.getCreate_Time() + "\t\t" + post.getView_count());
         }
         System.out.println();
     }
