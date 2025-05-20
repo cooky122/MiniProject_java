@@ -95,7 +95,6 @@ public class BoardDAO {
         return board;
     }//end of findBoardById
 
-
     public List<BoardDTO> findBoardId(){
         List<BoardDTO> boards = new ArrayList<BoardDTO>();
         String sql = "select  board_id, board_title from board";
@@ -108,9 +107,7 @@ public class BoardDAO {
             while(rs.next()){
                 BoardDTO board = new BoardDTO();
                 board.setBoard_id(rs.getInt("board_id"));
-                board.setMem_id(rs.getString("mem_id"));
                 board.setBoard_title(rs.getString("board_title"));
-                board.setBoard_createdate(rs.getTimestamp("board_createdate").toString());
 
                 boards.add(board);
             }
