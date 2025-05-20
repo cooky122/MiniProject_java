@@ -1,6 +1,8 @@
 package dbconnection.post;
 
 import dbconnection.Comment.CommentMain;
+import dbconnection.board.BoardDAO;
+import dbconnection.board.BoardDTO;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -16,6 +18,7 @@ import java.util.Scanner;
 public class PostMain {
     public static Scanner scanner = new Scanner(System.in);
     public static PostDAO postdao = new PostDAO();
+    public static BoardDAO boarddao = new BoardDAO();
 
     //<editor-fold desc="게시물 CRUD 시작 선택지">
     public static void start() {
@@ -63,12 +66,15 @@ public class PostMain {
         //PostDAO 의 findPost 메소드에 post_id를 매개변수로 넘겨 해당 게시글 정보를 객체로 받아오기
         Post post = postdao.findPost(selectPost);
 
-        //board_id가 1이면 공지게시판, 2이면 자유게시판
-        if(post.getBoard_id() == 1){
-            System.out.println("<공지게시판>");
-        }else if(post.getBoard_id() == 2){
-            System.out.println("<자유게시판>");
+        List<BoardDTO> boardList = boarddao.findBoardId();
+
+        //board_id와 일치하는 board_title 출력
+        for(BoardDTO b :  boardList){
+            if(post.getBoard_id() == b.getBoard_id()){
+                System.out.println("<"+b.getBoard_title()+">");
+            }
         }
+
         System.out.println(post);   //DB 에서 가져온 post 객체 출력
         System.out.println();
 
