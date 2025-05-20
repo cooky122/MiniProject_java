@@ -14,7 +14,7 @@ public class BoardMain {
     //SQL문 사용가능한 DATETIME 형태로 포맷
     public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     public static String formattedTime = now.format(formatter);
-    public static void main(String[] args) {
+    public static void BoardStart() {
 
         while (true) {
             System.out.println("\n📝 게시판 관리 메뉴");
