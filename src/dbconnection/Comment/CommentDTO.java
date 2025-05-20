@@ -7,11 +7,10 @@ public class CommentDTO {
     String content;
     String createTime;
 
-    public CommentDTO(int post_id, String mem_id, String content, String createTime) {
+    public CommentDTO(int post_id, String mem_id, String content) {
         this.post_id = post_id;
         this.mem_id = mem_id;
         this.content = content;
-        this.createTime = createTime;
     }
 
     public CommentDTO(String mem_id, int comment_id) {

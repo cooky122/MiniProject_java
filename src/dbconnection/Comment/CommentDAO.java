@@ -15,7 +15,7 @@ public class CommentDAO {
   ResultSet rs = null;
 // <editor-fold desc="추가"
   public void insertComment(CommentDTO commentDTO) {
-    String sql = "insert into comment (post_id, mem_id, content, createTime) values (?,?,?,?)";
+    String sql = "insert into comment (post_id, mem_id, content) values (?,?,?)";
 
     try {
       con = MyDBConnection.getConnection();
@@ -24,7 +24,6 @@ public class CommentDAO {
       pstmt.setInt(1, commentDTO.post_id);
       pstmt.setString(2, commentDTO.mem_id);
       pstmt.setString(3, commentDTO.content);
-      pstmt.setString(4, commentDTO.createTime);
 
       pstmt.executeUpdate();
     } catch (SQLException e) {

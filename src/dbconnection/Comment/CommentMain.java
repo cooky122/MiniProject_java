@@ -46,7 +46,7 @@ public class CommentMain {
                 case "4":
                     DeleteComment();
                     break;
-                case "100":
+                case "5":
                     return;
                 default:
                     System.out.println("잘못된 값 입력");
@@ -111,9 +111,8 @@ public class CommentMain {
         System.out.println("\n작성하고자 하는 내용을 입력해주세요");
         System.out.print(">>");
         String content = sc.nextLine();
-        String createTime = formattedTime;
 
-        CommentDTO dto = new CommentDTO(post_id,mem_id,content,createTime);
+        CommentDTO dto = new CommentDTO(post_id,mem_id,content);
 
         commentDAO.insertComment(dto);
     }//end of InsertComment
