@@ -18,7 +18,7 @@ public class BoardMain {
 
         while (true) {
             System.out.println("\n📝 게시판 관리 메뉴");
-            System.out.println("1.게시판 생성 / 2.게시판 전체 열람 / 3.게시판 ID로 열람 / 4.게시판 제목 수정 / 5.게시판 삭제 / 0.종료");
+            System.out.println("1.게시판 생성 / 2.게시판 전체 열람 / 3.게시판 번호로 열람 / 4.게시판 제목 수정 / 5.게시판 삭제 / 0.종료");
             System.out.print("메뉴 선택 : ");
             String choice = scanner.nextLine();
 
@@ -80,12 +80,12 @@ public class BoardMain {
 
     // ID로 게시판 조회
     private static void findBoardById() {
-        System.out.print("\n[ 게시판 ID로 조회 ]\n게시판 ID 입력: ");
+        System.out.print("\n[ 게시판 번호로 조회 ]\n게시판 번호 입력: ");
         int id = Integer.parseInt(scanner.nextLine());
 
         BoardDTO board = boardDAO.findBoardsById(id);
         if (board == null) {
-            System.out.println("해당 ID의 게시판이 존재하지 않습니다.");
+            System.out.println("해당 번호의 게시판이 존재하지 않습니다.");
         } else {
             printBoard(board);
         }
@@ -93,7 +93,7 @@ public class BoardMain {
 
     // 게시판 제목 수정
     private static void updateBoard() {
-        System.out.print("\n[ 게시판 제목 수정 ]\n수정할 게시판 ID 입력: ");
+        System.out.print("\n[ 게시판 제목 수정 ]\n수정할 게시판 번호 입력: ");
         int id = Integer.parseInt(scanner.nextLine());
 
         System.out.print("새 제목 입력: ");
@@ -104,7 +104,7 @@ public class BoardMain {
 
     // 게시판 삭제
     private static void deleteBoard() {
-        System.out.print("\n[ 게시판 삭제 ]\n삭제할 게시판 ID 입력: ");
+        System.out.print("\n[ 게시판 삭제 ]\n삭제할 게시판 번호 입력: ");
         int id = Integer.parseInt(scanner.nextLine());
 
         boardDAO.deleteBoard(id);
@@ -113,7 +113,7 @@ public class BoardMain {
     // 게시판 정보 출력
     public static void printBoard(BoardDTO board) {
         System.out.println("--------------------------");
-        System.out.println("게시판 ID   : " + board.getBoard_id());
+        System.out.println("게시판 번호   : " + board.getBoard_id());
         System.out.println("작성자 ID   : " + board.getMem_id());
         System.out.println("게시판 제목 : " + board.getBoard_title());
         System.out.println("생성 일자   : " + board.getBoard_createdate());
