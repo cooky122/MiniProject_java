@@ -26,7 +26,7 @@ public class ExamMain {
       System.out.print("\nPW 입력 >>");
       String pw = sc.nextLine();
       if(ExLogin(id,pw)){
-        System.out.println("카페에 오신걸 환영합니다!");
+        System.out.println(loginName(id) + "님 카페에 오신걸 환영합니다!");
         BoardMain.BoardStart();
         break;
       }
@@ -36,9 +36,10 @@ public class ExamMain {
     }
   }
 
-
+// <editor-fold> desc="예비 로그인"
+  //예비용 로그인 코드
   public static boolean ExLogin(String id, String pw) {
-    String sql = "select mem_pw from board where mem_id=?";
+    String sql = "select mem_pw from member where mem_id=?";
     boolean result = false;
 
     try {
@@ -65,5 +66,34 @@ public class ExamMain {
       MyDBConnection.close(rs, pstmt, con);
     }
     return result;
-  }
+  }//end of ExLogin
+  
+  //로그인 한 유저 이름
+  public static String loginName(String id){
+    String sql = "select name, grade from member where mem_id=?";
+    String result = "";
+
+    try {
+      con = MyDBConnection.getConnection();
+      pstmt = con.prepareStatement(sql);
+      pstmt.setString(1,id);
+
+      rs = pstmt.executeQuery();
+
+      rs.next();
+      result = rs.getString("name");
+      result += " / " + rs.getString("grade");
+    } catch (SQLException e){
+      e.printStackTrace();
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      MyDBConnection.close(rs, pstmt, con);
+    }
+
+    return result;
+
+  }//end of loginName
+
+  //</editor-fold>
 }//end of class
