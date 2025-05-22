@@ -23,8 +23,6 @@ public class CommentMain {
     public static String formattedTime = now.format(formatter);
     //Scanner 객체 선언
     public static Scanner sc = new Scanner(System.in);
-    private static PostMain postMain;
-    private static BoardMain boardMain;
     private static PostDAO postDAO = new PostDAO();
     private static BoardDAO boardDAO = new BoardDAO();
     private static CommentDAO commentDAO = new CommentDAO();
@@ -45,14 +43,17 @@ public class CommentMain {
                 case "3":
                     SelectComment();
                     break;
-                case "100":
+                case "4":
+                    DeleteComment();
+                    break;
+                case "5":
                     return;
                 default:
                     System.out.println("잘못된 값 입력");
             }
         }
     }
-//</editor-fold>
+    //</editor-fold>
 
 //<editor-fold desc="삭제/수정">
     private static void UpdateComment() {
@@ -88,6 +89,9 @@ public class CommentMain {
             System.out.println("게시글은 본인만 수정/삭제할 수 있습니다.");
         }
     }//end of UpdateComment
+
+    private static void DeleteComment() {
+    }//end of DeleteComment
 //</editor-fold>
 
 //<editor-fold desc="삽입">
@@ -97,7 +101,7 @@ public class CommentMain {
 
         System.out.println("댓글 입력 페이지");
         System.out.println("원하는 게시글을 선택해 주세요");
-        postMain.printPostList();
+        PostMain.printPostList();
         System.out.print("게시글 번호 입력 >>");
         int post_id = Integer.parseInt(sc.nextLine());
 //        추후 로그인 상태라면 String mem_id = 입력된 ID
@@ -107,9 +111,8 @@ public class CommentMain {
         System.out.println("\n작성하고자 하는 내용을 입력해주세요");
         System.out.print(">>");
         String content = sc.nextLine();
-        String createTime = formattedTime;
 
-        CommentDTO dto = new CommentDTO(post_id,mem_id,content,createTime);
+        CommentDTO dto = new CommentDTO(post_id,mem_id,content);
 
         commentDAO.insertComment(dto);
     }//end of InsertComment
