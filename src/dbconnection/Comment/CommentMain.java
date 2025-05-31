@@ -43,9 +43,6 @@ public class CommentMain {
                 case "3":
                     SelectComment();
                     break;
-                case "4":
-                    DeleteComment();
-                    break;
                 case "5":
                     return;
                 default:
@@ -89,9 +86,6 @@ public class CommentMain {
             System.out.println("게시글은 본인만 수정/삭제할 수 있습니다.");
         }
     }//end of UpdateComment
-
-    private static void DeleteComment() {
-    }//end of DeleteComment
 //</editor-fold>
 
 //<editor-fold desc="삽입">

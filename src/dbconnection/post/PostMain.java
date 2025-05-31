@@ -20,8 +20,15 @@ public class PostMain {
     public static PostDAO postdao = new PostDAO();
     public static BoardDAO boarddao = new BoardDAO();
 
+    public static String ID;
+    public static int BoardID;
+
+
     //<editor-fold desc="게시물 CRUD 시작 선택지">
-    public static void start() {
+    public static void start(String id, int board_id) {
+        ID = id;
+        BoardID = board_id;
+
         System.out.println("<게시글 작성 페이지>");
 
         //while 문으로 번호 입력받아서 다음 행동 수행
@@ -30,7 +37,7 @@ public class PostMain {
             //소속 게시판 | 제목 | 작성자 | 작성일 | 조회수 순서로 출력
             printPostList();
 
-            System.out.println("1.게시글 조회 / 2.게시글 작성 / 3.게시글 삭제 / 4.게시글 검색 / 5. 종료");
+            System.out.println("1.게시글 조회 / 2.게시글 작성 / 3.게시글 삭제 / 4.게시글 검색 / 5. 보드 선택으로 돌아가기");
             int select = scanner.nextInt();
             scanner.nextLine();
 
