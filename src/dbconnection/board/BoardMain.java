@@ -1,6 +1,7 @@
 package dbconnection.board;
 
 import dbconnection.board.BoardDAO;
+import dbconnection.post.PostMain;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -14,9 +15,12 @@ public class BoardMain {
     //SQL문 사용가능한 DATETIME 형태로 포맷
     public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     public static String formattedTime = now.format(formatter);
-    public static void BoardStart() {
+    public static String ID;
+    public static void BoardStart(String id) {
 
+        ID = id;
         while (true) {
+
             System.out.println("\n📝 게시판 관리 메뉴");
             System.out.println("1.게시판 생성 / 2.게시판 전체 열람 / 3.게시판 번호로 열람 / 4.게시판 제목 수정 / 5.게시판 삭제 / 0.종료");
             System.out.print("메뉴 선택 : ");
@@ -50,8 +54,8 @@ public class BoardMain {
     // 게시판 생성
     private static void insertBoard() {
         System.out.println("\n[게시판 생성]");
-        System.out.print("작성자 ID 입력 : ");
-        String memId = scanner.nextLine();
+//        System.out.print("작성자 ID 입력 : ");
+        String memId = ID;
 
         System.out.print("게시판 제목 입력 : ");
         String title = scanner.nextLine();
@@ -76,6 +80,14 @@ public class BoardMain {
             for (BoardDTO board : boards)
                 printBoard(board);
         }
+
+        //<editor-fold desc="형관 수정">
+        System.out.println("몇번 게시판을 이용하시겠습니까?");
+
+        int id = Integer.parseInt(scanner.nextLine());
+
+        PostMain.start(ID,id);
+        //</editor-fold>
     }
 
     // ID로 게시판 조회
@@ -88,6 +100,7 @@ public class BoardMain {
             System.out.println("해당 번호의 게시판이 존재하지 않습니다.");
         } else {
             printBoard(board);
+            PostMain.start(ID,id);
         }
     }
 

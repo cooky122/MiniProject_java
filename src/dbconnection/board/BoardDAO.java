@@ -43,8 +43,8 @@ public class BoardDAO {
 
     public List<BoardDTO> findAllBoards(){
         List<BoardDTO> boards = new ArrayList<BoardDTO>();
-        String sql = "select * from board order by board_id desc";
-
+//        String sql = "select * from board order by board_id desc";
+        String sql = "select * from board";
         try {
             con = MyDBConnection.getConnection();
             pstmt = con.prepareStatement(sql);
