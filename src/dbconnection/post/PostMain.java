@@ -46,10 +46,10 @@ public class PostMain {
 
             switch(select) {
                 case 1:
-                    readProcess();    //조회할 게시글 id를 입력받는 메소드
+                    readProcess(ID);    //조회할 게시글 id를 입력받는 메소드
                     break;
                 case 2:
-                    insertProcess();    //작성할 게시글 제목, 내용을 입력받는 메소드
+                    insertProcess(ID, BoardID);    //작성할 게시글 제목, 내용을 입력받는 메소드
                     break;
                 case 3:
                     deleteProcess();    //삭제할 게시글 id를 입력받는 메소드
@@ -65,7 +65,7 @@ public class PostMain {
     //</editor-fold>
 
     //<editor-fold desc="게시물 조회">
-    public static void readProcess() {
+    public static void readProcess(String id) {
         System.out.print("조회할 게시글 번호 > ");
         int selectPost = scanner.nextInt();
         scanner.nextLine();
@@ -89,24 +89,22 @@ public class PostMain {
 
         while(true) {
             //좋아요 할지 말지 선택
-            System.out.println(" 1.좋아요 / 2.게시글 수정 / 3.다음");
+            System.out.println(" 1.좋아요 / 2.게시글 수정 / 3.댓글 이동 /4.다음 ");
             int selectACT = scanner.nextInt();
             scanner.nextLine();
 
-            if(selectACT == 3){ //다음 선택시 아무 행동도 하지 않고 넘어감
+            if(selectACT == 4){ //다음 선택시 아무 행동도 하지 않고 넘어감
                 break;
             }else if(selectACT == 1){
                 postdao.updateLike(selectPost); //좋아요 선택시 좋아요 업데이트 후 반복문 처음으로 이동(게시글 수정을 할수도 있기 때문에)
             }else if(selectACT == 2){
-                updateProcess(post); //게시글 수정 선택시 update 메소드 호출, 수정할 제목, 내용 입력받는 메소드, 수행 후 반복문 처음으로 이동(게시글 좋아요 누를수도 있기 때문에)
+                updateProcess(post, id); //게시글 수정 선택시 update 메소드 호출, 수정할 제목, 내용 입력받는 메소드, 수행 후 반복문 처음으로 이동(게시글 좋아요 누를수도 있기 때문에)
+            }else if(selectACT == 3){
+                CommentMain.Start(id, selectPost);
             }else{
                 System.out.println("잘못된 입력입니다.");
             }
         }
-
-        //여기에 댓글 CRUD 기능 삽입
-        //매개변수로 현재 읽은 게시물에 대한 post 객체 넘겨주면 될듯
-        CommentMain.Start();
     }
     //</editor-fold>
 
@@ -140,23 +138,24 @@ public class PostMain {
 
     //<editor-fold desc="게시물 작성">
     //insert 값을 입력받는 메소드
-    public static void insertProcess() {
+    public static void insertProcess(String id, int board_id) {
         Post post = new Post();
 
         //게시판 선택
-        System.out.println("게시판 선택");
-        System.out.println("1. 공지게시판 / 2. 자유게시판");
-        int select = scanner.nextInt();
-        scanner.nextLine();
+//        System.out.println("게시판 선택");
+//        System.out.println("1. 공지게시판 / 2. 자유게시판");
+//        int select = scanner.nextInt();
+//        scanner.nextLine();
+//
+//        int board_id;
+//        if(select == 1){
+//            board_id = 1;
+//        }else {
+//            board_id = 2;
+//        }
 
-        int board_id;
-        if(select == 1){
-            board_id = 1;
-        }else {
-            board_id = 2;
-        }
         //작성자 설정
-        String mem_id = "user01";
+        post.setMem_id(id);
         //제목 입력
         System.out.print("제목: ");
         String post_title = scanner.nextLine();
@@ -172,7 +171,6 @@ public class PostMain {
 
         //post dto 객체에 값 넣기
         post.setBoard_id(board_id);
-        post.setMem_id(mem_id);
         post.setPost_title(post_title);
         post.setContent(content);
         post.setPost_type(post_type);
@@ -184,12 +182,12 @@ public class PostMain {
 
     //<editor-fold desc="게시물 수정사항 작성">
     //수정할 제목, 내용을 입력받는 메소드
-    public static void updateProcess(Post post) {
+    public static void updateProcess(Post post, String id) {
         //수정하려는 사람이 작성자 본인인지 확인, 맞으면 수정 진행하고 아니면 updateProcess 메소드 종료
-//        if(!<여기에 작성자 mem_id 가져오기>.equals(post.getMem_id())){
-//            System.out.println("게시물 작성자만 수정할 수 있습니다.");
-//            return;
-//        }
+        if(!id.equals(post.getMem_id())){
+            System.out.println("게시물 작성자만 수정할 수 있습니다.");
+            return;
+        }
 
         System.out.println("<게시글 수정 페이지>");
         System.out.println(post);   //기존 제목, 내용 가져와 출력
