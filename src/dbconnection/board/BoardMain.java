@@ -86,7 +86,7 @@ public class BoardMain {
 
         int id = Integer.parseInt(scanner.nextLine());
 
-        PostMain.start(ID,id);
+        PostMain.start(ID, id);
         //</editor-fold>
     }
 
@@ -100,7 +100,7 @@ public class BoardMain {
             System.out.println("해당 번호의 게시판이 존재하지 않습니다.");
         } else {
             printBoard(board);
-            PostMain.start(ID,id);
+            PostMain.start(ID, id);
         }
     }
 

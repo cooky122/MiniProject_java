@@ -30,9 +30,12 @@ public class Main {
                 if(memDao.isAdmin(id)) {
                     System.out.println("유저 관리 페이지");
                     while (true) {
-                        System.out.println("1. 유저 목록 조회 / 2. 유저 강퇴 / 3. 유저 검색 / 4. 보드로 이동");
+                        System.out.println("1. 유저 목록 조회 / 2. 유저 강퇴 / 3. 유저 검색 / 4. 보드로 이동/ 5. 로그아웃");
                         String ans = sc.nextLine();
 
+                        if(ans.equals("5")){
+                            System.out.println("로그아웃 되었습니다.");
+                        }
                         switch (ans) {  //유저 목록 조회
                             case "1":
                                 printAll(memDao.findAllMember());

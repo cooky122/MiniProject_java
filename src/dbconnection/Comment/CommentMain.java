@@ -27,23 +27,28 @@ public class CommentMain {
     private static BoardDAO boardDAO = new BoardDAO();
     private static CommentDAO commentDAO = new CommentDAO();
 
-//<editor-fold desc="시작 선택지">
-    public static void Start(){
+    public static String ID;
+    public static int POST_ID;
+    //<editor-fold desc="시작 선택지">
+    public static void Start(String id, int post_id){
+        ID = id;
+        POST_ID = post_id;
+
         while(true) {
             System.out.println("댓글 생성 메인 페이지");
-            System.out.println("1.댓글 입력 / 2.댓글 수정/삭제 / 3.댓글 검색");
+            System.out.println("1.댓글 입력 / 2.댓글 수정/삭제 / 3.댓글 검색 / 4.게시글로 이동");
             String ans = sc.nextLine();
             switch (ans) {
                 case "1":
-                    InsetComment();
+                    InsertComment(ID, POST_ID);
                     break;
                 case "2":
-                    UpdateComment();
+                    UpdateComment(ID);
                     break;
                 case "3":
                     SelectComment();
                     break;
-                case "5":
+                case "4":
                     return;
                 default:
                     System.out.println("잘못된 값 입력");
@@ -53,15 +58,15 @@ public class CommentMain {
     //</editor-fold>
 
 //<editor-fold desc="삭제/수정">
-    private static void UpdateComment() {
+    private static void UpdateComment(String id) {
         System.out.println("댓글 수정 페이지");
-        System.out.println("본인의 ID 를 입력 해주세요");
-        System.out.print("ID 입력>>");
-        String mem_id = sc.nextLine();
+//        System.out.println("본인의 ID 를 입력 해주세요");
+//        System.out.print("ID 입력>>");
+//        String mem_id = sc.nextLine();
         System.out.println("수정/삭제 하고자 하는 댓글의 번호를 입력해주세요");
         System.out.print("댓글 번호 입력>>");
         int comment_id = Integer.parseInt(sc.nextLine());
-        if(commentDAO.isOwner(comment_id,mem_id)) {
+        if(commentDAO.isOwner(comment_id, id)) {
             System.out.println("게시글을 수정/삭제 하시겠습니까?");
             System.out.println("1수정 / 2.삭제 / 3.취소");
             System.out.print(">>");
@@ -83,30 +88,29 @@ public class CommentMain {
                 }
             }
         }else {
-            System.out.println("게시글은 본인만 수정/삭제할 수 있습니다.");
+            System.out.println("댓글은 본인만 수정/삭제할 수 있습니다.");
         }
     }//end of UpdateComment
 //</editor-fold>
 
 //<editor-fold desc="삽입">
-    private static void InsetComment() {
+    private static void InsertComment(String id, int post_id) {
         List<BoardDTO> boards = boardDAO.findAllBoards();
 
-
         System.out.println("댓글 입력 페이지");
-        System.out.println("원하는 게시글을 선택해 주세요");
-        PostMain.printPostList();
-        System.out.print("게시글 번호 입력 >>");
-        int post_id = Integer.parseInt(sc.nextLine());
-//        추후 로그인 상태라면 String mem_id = 입력된 ID
-        System.out.println("\n당신의 ID를 입력해 주세요");
-        System.out.print("ID 입력 >>");
-        String mem_id = sc.nextLine();
+//        System.out.println("원하는 게시글을 선택해 주세요");
+//        PostMain.printPostList();
+//        System.out.print("게시글 번호 입력 >>");
+//        int post_id = Integer.parseInt(sc.nextLine());
+////        추후 로그인 상태라면 String mem_id = 입력된 ID
+//        System.out.println("\n당신의 ID를 입력해 주세요");
+//        System.out.print("ID 입력 >>");
+//        String mem_id = sc.nextLine();
         System.out.println("\n작성하고자 하는 내용을 입력해주세요");
         System.out.print(">>");
         String content = sc.nextLine();
 
-        CommentDTO dto = new CommentDTO(post_id,mem_id,content);
+        CommentDTO dto = new CommentDTO(post_id, id, content);
 
         commentDAO.insertComment(dto);
     }//end of InsertComment
